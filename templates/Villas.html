@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+      <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <h2 class="search-title">Villas Confortables et Équipés</h2>
+
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/Villas1" class="card">
+        <img src="/static/Villas1-images/Villa Darbouazza-photo1.jpg" alt="Villa Darbouazza-Casablanca">
+      </a>
+      <div class="card-content">
+        <h2>Villa Darbouazza-Casablanca</h2>
+        <p>🌍 Tamaris, Maroc</p>
+        <p>Villa à Casablanca : 2 chambres, clim., Wi‑Fi, TV, cuisine équipée, piscine intérieure & privée, jardin,
+          terrasse, parking gratuit, à 400 m de Jack Beach et 16 km du Morocco Mall.</p>
+        <p class="PRICEMAD"><strong> Prix : 3 800 000 MAD </strong></p>
+
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Villas2" class="card">
+        <img src="/static/Villas2-images/Villa de Luxe piscine privée-photo1.jpg" alt="Villa de Luxe piscine privée">
+      </a>
+      <div class="card-content">
+        <h2>Villa de Luxe piscine privée-Casablanca</h2>
+        <p>🌍 Villa N 14 Residence Hyde Park Bouskoura Casablanca, 27182 Casablanca, Maroc</p>
+        <p>Villa à Casablanca : 3 chambres, clim., Wi‑Fi, TV, cuisine équipée, 4 salles de bain,
+          piscine extérieure & privée, jardin, terrasse, parking gratuit, à 17 km d’Anfa Place et 19 km de la Mosquée
+          Hassan II.</p>
+        <p class="PRICEMAD"><strong> Prix : 3 916 000 MAD </strong></p>
+
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Villas3" class="card">
+        <img src="/static/Villas3-images/Villa Nawal-photo1.jpg" alt="Villa Nawal-Agadi">
+      </a>
+      <div class="card-content">
+        <h2>Villa Nawal-Agadir</h2>
+        <p>🌍 G3R3+4M, Douar Zemrane</p>
+        <p>Villa à Agadir : 2 chambres, 2 SDB, clim., Wi‑Fi, salon, cuisine équipée, piscine privée chauffée sans
+          vis-à-vis, terrasse, jardin, parking gratuit.</p>
+
+
+        <p class="PRICEMAD"><strong> Prix : 3 200 000 MAD </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/Villas4" class="card">
+        <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo1.jpg" alt="Villa Palmeraie Golf Agadir">
+      </a>
+      <div class="card-content">
+        <h2>Villa Palmeraie Golf Agadir</h2>
+        <p>🌍 Inezgane 80000</p>
+        <p>Villa à Agadir : 4 chambres, 3 SDB, clim., Wi‑Fi, salon, cuisine équipée, piscine privée, terrasse, jardin,
+          parking gratuit.</p>
+
+
+        <p class="PRICEMAD"><strong> Prix : 3 234 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Villas5" class="card">
+        <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo1.jpg" alt="Villa Camélia des 3 Z">
+      </a>
+      <div class="card-content">
+        <h2>Villa Camélia des 3 Z-Marrakech</h2>
+        <p>🌍 573 Secteur 040311; DUPLEX N° 3 BLOC 7 JNANE TALLAGHT, Rte de Fès, Marrakech 40000</p>
+        <p>Villa à Marrakech : 3 chambres, 3 SDB, clim., Wi‑Fi, salon, cuisine équipée, piscine privée, spa, parc
+          aquatique, terrasse, jardin, parking gratuit. </p>
+
+
+        <p class="PRICEMAD"><strong> Prix : 2 750 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Villas6" class="card">
+        <img src="/static/Villas6-images/Villa de luxe à Marrakech-photo1.jpg" alt="Villa de luxe à Marrakech">
+      </a>
+      <div class="card-content">
+        <h2>Villa de luxe à Marrakech</h2>
+        <p>🌍 Dar jihane Amezrou ltehtani, sidi abdellah ghiat, Marrakech, Maroc</p>
+        <p>Villa à Marrakech : 4 chambres, 4 SDB, clim., Wi‑Fi, salon, cuisine équipée, piscine privée, jardin,
+          terrasse, parking gratuit. Vue sur les montagnes.</p>
+
+        <p class="PRICEMAD"><strong> Prix : 6 500 000 MAD </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/Villas7" class="card">
+        <img src="/static/Villas7-images/SUPERBE VILLA-photo1.jpg" alt="SUPERBE VILLA">
+      </a>
+      <div class="card-content">
+        <h2>SUPERBE VILLA-Rabat</h2>
+        <p>🌍 Prestigia - Riyad Al Andalous, Sevilla 1, Rabat</p>
+        <p>Villa à Rabat : 3 chambres, 1 SDB, clim., Wi‑Fi, salon, cuisine équipée, piscine privée intérieure et
+          extérieure, bain à remous, terrasse, jardin, barbecue, parking gratuit. À quelques pas de la plage des
+          Nations.</p>
+
+        <p class="PRICEMAD"><strong> Prix : 3 560 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Villas8" class="card">
+        <img src="/static/Villas8-images/Villa 3 Charme et Vue Mer Face-photo1.jpg"
+          alt="Villa 3 Charme et Vue Mer Face">
+      </a>
+      <div class="card-content">
+        <h2>Villa 3 Charme et Vue Mer Face-Rabat</h2>
+        <p>🌍 10100, Rabat</p>
+        <p>Villa à Rabat : 1 chambre, 2 SDB, clim., salon, cuisine équipée, télévision à écran plat, balcon, terrasse,
+          jardin. Située en bord de mer, à proximité du Carrousel Mall. À 7 km de la Bibliothèque nationale et 8,2 km
+          de la Kasbah des Oudayas.</p>
+
+        <p class="PRICEMAD"><strong> Prix : 3 000 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Villas9" class="card">
+        <img src="/static/Villas9-images/Villa BERBERINE-photo1.jpg" alt="Villa BERBERINE">
+      </a>
+      <div class="card-content">
+        <h2>Villa BERBERINE-Essaouira</h2>
+        <p>🌍 M2JF+PVJ, Goulmima 52250</p>
+        <p>Villa à Essaouira : 4 chambres, 4 SDB, Wi‑Fi gratuit, salon commun, cuisine équipée, télévision à écran
+          plat, jardin, terrasse avec vue. Piscine extérieure et piscine privée.</p>
+
+        <p class="PRICEMAD"><strong> Prix : 4 260 000 MAD </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/Villas10" class="card">
+        <img src="/static/Villas10-images/Villa Serinie-photo1.jpg" alt="Villa Serinie">
+      </a>
+      <div class="card-content">
+        <h2>Villa Serinie-Essaouira</h2>
+        <p>🌍 C8MH+RGC, Bouzama</p>
+        <p>Villa à Essaouira : 4 chambres, 4 SDB, climatisation, Wi‑Fi gratuit, salon, cuisine entièrement équipée,
+          télévision à écran plat, jardin, terrasse avec vue sur la montagne. Piscine extérieure privée.
+        </p>
+        <p class="PRICEMAD"><strong> Prix : 2 725 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Villas11" class="card">
+        <img src="/static/Villas11-images/Kiola Villa-photo1.jpg" alt="Kiola Villa-Taghazout">
+      </a>
+      <div class="card-content">
+        <h2>Kiola Villa-Taghazout</h2>
+        <p>🌍 Taghazout, Ifraden</p>
+        <p>Villa à Taghazout : 4 chambres, 4 salles de bains, climatisation, Wi-Fi gratuit, piscine extérieure privée,
+          jardin, terrasse avec vue sur la mer, parking privé gratuit, à proximité du Golf Tazegzout et de l’Atlantica
+          Parc Aquatique.</p>
+        <p class="PRICEMAD"><strong> Prix : 5 800 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Villas12" class="card">
+        <img src="/static/Villas12-images/Lemon Grove Villa Taghazout-photo1.jpg" alt="Lemon Grove Villa Taghazout">
+      </a>
+      <div class="card-content">
+        <h2>Lemon Grove Villa Taghazout</h2>
+        <p>🌍 Tamraght</p>
+        <p>Villa à Taghazout : 3 chambres, 2 salles de bains, climatisation, piscine privée, balcon, terrasse, jardin,
+          parking privé gratuit, à 1,9 km de la plage de Taghazout, proche du Golf Tazegzout et du port d’Agadir.</p>
+        </p>
+        <p class="PRICEMAD"><strong> Prix : 4 200 000 MAD </strong></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../static/script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+</html>

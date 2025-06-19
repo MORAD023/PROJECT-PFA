@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../../static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+       <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+  <main class="appartement-fiche">
+    <h1 class="appartement-titre">Kiola Villa-Taghazout</h1>
+    <div class="appartement-meta">Villa à vendre</div>
+    <p class="PRICEMAD"><strong> Prix :</strong> 5 800 000 MAD</p>
+    <!-- Main image -->
+    <div class="appartement-group">
+      <div class="photo-viewer">
+        <img id="mainImage" src="/static/Villas11-images/Kiola Villa-photo1.jpg" alt="Image principale">
+
+        <div class="left-line"></div>
+        <div class="right-line"></div>
+      </div>
+
+      <!-- Thumbnail gallery -->
+      <div class="appartement-galerie">
+        <div>
+          <img src="/static/Villas11-images/Kiola Villa-photo1.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo2.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo3.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo4.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo5.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas11-images/Kiola Villa-photo6.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo7.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo8.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo9.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo10.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas11-images/Kiola Villa-photo11.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo12.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo13.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo14.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo15.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas11-images/Kiola Villa-photo16.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo17.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo18.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo19.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo20.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas11-images/Kiola Villa-photo21.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo22.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo23.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo24.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo25.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas11-images/Kiola Villa-photo26.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo27.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo28.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo29.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas11-images/Kiola Villa-photo30.jpg" onclick="switchPhoto(this)">
+        </div>
+      </div>
+    </div>
+    <div class="appartement-description">
+      Situé à Taghazout, l’hébergement Kiola Villa offre une vue sur la mer. Il possède une piscine extérieure, un
+      jardin, une terrasse et une connexion Wi-Fi gratuite. Cette villa possède une piscine privée, un barbecue et un
+      parking privé gratuit.
+
+      Cette villa avec climatisation se compose de 4 chambres, d'un salon, d'une cuisine entièrement équipée avec un
+      réfrigérateur et une machine à café, ainsi que de 4 salles de bains avec un bidet et une douche. Une télévision
+      à
+      écran plat est à disposition.
+
+      En plus de profiter d’un service de location de vélos et d’un service de location de voitures sur place, vous
+      pourrez pratiquer le vélo dans les environs.
+
+      Vous séjournerez à respectivement 7,2 km et 10 km de ces lieux d’intérêt : Golf Tazegzout et Atlantica Parc
+      Aquatique. L'aéroport le plus proche (Aéroport d'Agadir-Al Massira) est à 44 km. Un service de navette aéroport
+      payant peut être assuré par l’établissement.
+    </div>
+
+    <div class="appartement-details">
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Détails de la Villa</h3>
+        <p><i class="fa-solid fa-water-ladder icon-large"></i> <strong>Piscine :</strong> Piscine extérieure privée,
+          ouverte toute l’année</p>
+        <p><i class="fa-solid fa-square-parking icon-large"></i> <strong>Parking :</strong> Gratuit, privé, sans
+          réservation préalable</p>
+        <p><i class="fa-solid fa-people-group icon-large"></i> <strong>Capacité :</strong> Jusqu’à 6 adultes et 2
+          enfants</p>
+        <p><i class="fa-solid fa-house icon-large"></i> <strong>Villa :</strong> 4 chambres, 2 salons avec
+          canapés-lits,
+          4
+          salles de bains privatives, cuisine équipée, balcon, terrasse, jardin</p>
+        <p><i class="fa-solid fa-bed icon-large"></i> <strong>Literie :</strong><br>
+          • Chambre 1 : 1 grand lit double<br>
+          • Chambre 2 : 2 lits simples<br>
+          • Chambre 3 : 1 grand lit double<br>
+          • Chambre 4 : 2 lits simples + 1 grand lit double<br>
+          • Salons : 2 canapés-lits
+        </p>
+        <p><i class="fa-solid fa-temperature-high icon-large"></i> <strong>Climatisation :</strong> Oui, dans toute la
+          villa</p>
+        <p><i class="fa-solid fa-bath icon-large"></i> <strong>Salles de bains :</strong> Privatives avec douche,
+          bidet,
+          serviettes, toilettes supplémentaires</p>
+        <p><i class="fa-solid fa-kitchen-set icon-large"></i> <strong>Cuisine :</strong> Entièrement équipée
+          (lave-vaisselle, lave-linge, micro-ondes, four, plaque de cuisson, grille-pain, machine à café, bouilloire
+          électrique, réfrigérateur, ustensiles, produits ménagers)</p>
+        <p><i class="fa-solid fa-tv icon-large"></i> <strong>Télévision :</strong> Écran plat avec service de
+          streaming
+          (ex. Netflix)</p>
+        <p><i class="fa-solid fa-umbrella-beach icon-large"></i> <strong>Extérieur :</strong> Terrasse bien exposée,
+          patio, balcon, jardin, aire de pique-nique, mobilier d’extérieur, barbecue</p>
+        <p><i class="fa-solid fa-dog icon-large"></i> <strong>Animaux :</strong> Admis sans supplément</p>
+        <p><i class="fa-solid fa-wheelchair icon-large"></i> <strong>Accessibilité :</strong> Logement accessible en
+          fauteuil roulant (rez-de-chaussée), étages supérieurs accessibles uniquement par escalier</p>
+        <p><i class="fa-solid fa-money-bill-wave icon-large"></i> <strong>Prix :</strong> 5 800 000 MAD</p>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Équipements & Services</h3>
+        <ul>
+          <li><i class="fa-solid fa-umbrella-beach icon-large"></i> Plage à proximité</li>
+          <li><i class="fa-solid fa-wifi icon-large"></i> Wi-Fi gratuit</li>
+          <li><i class="fa-solid fa-square-parking icon-large"></i> Parking gratuit</li>
+          <li><i class="fa-solid fa-people-group icon-large"></i> Chambres familiales</li>
+          <li><i class="fa-solid fa-plane-departure icon-large"></i> Navette aéroport (en supplément)</li>
+          <li><i class="fa-solid fa-ban-smoking icon-large"></i> Chambres non-fumeurs</li>
+          <li><i class="fa-solid fa-umbrella-beach icon-large"></i> Aire de pique-nique et mobilier extérieur</li>
+          <li><i class="fa-solid fa-hot-tub-person icon-large"></i> Massages et bien-être (en supplément)</li>
+          <li><i class="fa-solid fa-bicycle icon-large"></i> Activités extérieures : cyclisme, randonnée, visites à
+            vélo
+            (en supplément)</li>
+          <li><i class="fa-solid fa-golf-ball-tee icon-large"></i> Parcours de golf à moins de 3 km (en supplément)
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-user-shield icon-large"></i> Conditions de l’établissement</h3>
+        <ul>
+          <li>Tous les enfants sont les bienvenus</li>
+          <li>Aucun lit bébé ou lit d’appoint disponible</li>
+          <li>Fêtes et événements non autorisés</li>
+          <li>Heures silencieuses de 01:00 à 06:00</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-language icon-large"></i> Langues parlées</h3>
+        <ul>
+          <li>Arabe, Anglais, Espagnol, Français, Italien</li>
+        </ul>
+
+      </div>
+    </div>
+    <div class="appartement-contact">
+      Intéressé par ce bien ? <br>
+      Contactez-nous dès aujourd'hui à <strong>info@tigmino.ma</strong> ou via WhatsApp au <strong>+212 6 74 60 20
+        18</strong> pour plus d'informations ou programmer une visite.
+    </div>
+
+
+
+    <div class="CONTACTMAP">
+      <!-- Contact Form -->
+      <div class="tigmino-contact">
+        <form id="settings-form" method="POST" action="/Réglages">
+          <h2>Ajouter une demande</h2>
+
+          <label>Nom · Prénom</label>
+          <input type="text" name="name" placeholder="Nom · Prénom" required>
+
+          <label>Téléphone</label>
+          <input type="text" name="phone" placeholder="Téléphone" required>
+
+          <label>Message</label>
+          <textarea name="message" required></textarea>
+
+          {% if not session.username %}
+          <h2>Connectez-vous au TIGMINO</h2>
+          {% else %}
+          <button class="save-btn" type="submit">SAUVEGARDER</button>
+          {% endif %}
+        </form>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3435.6306348891553!2d-9.704593224588454!3d30.559738174668144!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb24d0033211411%3A0xe59010e4fa904578!2sKiola%20Villa!5e0!3m2!1sfr!2sma!4v1750023069685!5m2!1sfr!2sma"
+          width="500px" height="460px" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+
+  </main>
+
+
+
+  <script src="../../static/Script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

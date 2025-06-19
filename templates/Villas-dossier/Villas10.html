@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../../static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+       <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <main class="appartement-fiche">
+    <h1 class="appartement-titre">Villa Serinie-Essaouira</h1>
+    <div class="appartement-meta">Villa à vendre</div>
+    <p class="PRICEMAD"><strong> Prix :</strong> 2 725 000 MAD</p>
+    <!-- Main image -->
+    <div class="appartement-group">
+      <div class="photo-viewer">
+        <img id="mainImage" src="/static/Villas10-images/Villa Serinie-photo1.jpg" alt="Image principale">
+
+        <div class="left-line"></div>
+        <div class="right-line"></div>
+      </div>
+
+      <!-- Thumbnail gallery -->
+      <div class="appartement-galerie">
+        <div>
+          <img src="/static/Villas10-images/Villa Serinie-photo1.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo2.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo3.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo4.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo5.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas10-images/Villa Serinie-photo6.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo7.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo8.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo9.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo10.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas10-images/Villa Serinie-photo11.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo12.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo13.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo14.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo15.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas10-images/Villa Serinie-photo16.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo17.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo18.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo19.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo20.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas10-images/Villa Serinie-photo21.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo22.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo23.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo24.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo25.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas10-images/Villa Serinie-photo26.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo27.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo28.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo29.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas10-images/Villa Serinie-photo30.jpg" onclick="switchPhoto(this)">
+        </div>
+      </div>
+    </div>
+    <div class="appartement-description">
+      Situé à Essaouira, l’hébergement Villa Serinie offre une vue sur la montagne. Il comprend une piscine extérieure,
+      un jardin, une terrasse et une connexion Wi-Fi gratuite. Cette villa possède un parking privé gratuit et une
+      réception ouverte 24h/24.
+
+      Cette villa avec climatisation se compose de 4 chambres, d'un salon, d'une cuisine entièrement équipée avec un
+      réfrigérateur et une machine à café, ainsi que de 4 salles de bains avec un bidet et une douche. Des serviettes et
+      du linge de lit sont à votre disposition.
+
+      Un petit-déjeuner à la carte, continental ou anglais/irlandais complet est servi sur place.
+
+      En plus de profiter d’un service de location de vélos et d’un service de location de voitures sur place, vous
+      pourrez pratiquer le vélo dans les environs.
+
+      Vous séjournerez à 12 km de ce lieu d’intérêt : Golf de Mogador. L'aéroport le plus proche (Aéroport Essaouira -
+      Mogador) est à 6 km. Un service de navette aéroport payant peut être assuré par l’établissement.
+    </div>
+
+    <div class="appartement-details">
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Détails de la Villa</h3>
+        <p><i class="fa-solid fa-ruler-combined icon-large"></i> <strong>Surface :</strong> Environ 250 m²</p>
+        <p><i class="fa-solid fa-bed icon-large"></i> <strong>Chambres :</strong> 4</p>
+        <p><i class="fa-solid fa-bath icon-large"></i> <strong>Salles de bain :</strong> 4</p>
+        <p><i class="fa-solid fa-umbrella-beach icon-large"></i> <strong>Terrasse :</strong> Oui</p>
+        <p><i class="fa-solid fa-mountain-sun icon-large"></i> <strong>Vue :</strong> Montagne, jardin, piscine</p>
+        <p><i class="fa-solid fa-people-group icon-large"></i> <strong>Capacité :</strong> Jusqu’à 5 personnes et 4
+          enfants</p>
+        <p><i class="fa-solid fa-bed icon-large"></i> <strong>Literie :</strong><br>
+          • Chambre 1 : 1 grand lit double<br>
+          • Chambre 2 : 1 grand lit double<br>
+          • Chambre 3 : 2 lits simples<br>
+          • Chambre 4 : 2 lits simples<br>
+          • Salon : 1 canapé-lit
+        </p>
+        <p><i class="fa-solid fa-dog icon-large"></i> <strong>Animaux :</strong> Acceptés sans supplément</p>
+        <p><i class="fa-solid fa-child icon-large"></i> <strong>Enfants :</strong> Tous les enfants sont les
+          bienvenus.<br>
+          • 0 – 3 ans : lit bébé gratuit sur demande
+        </p>
+        <p><i class="fa-solid fa-money-bill-wave icon-large"></i> <strong>Prix :</strong> 2 725 000 MAD</p>
+        <p><i class="fa-solid fa-tag icon-large"></i> <strong>Référence :</strong> Villa Serinie</p>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Équipements & Services</h3>
+        <ul>
+          <li><i class="fa-solid fa-water-ladder icon-large"></i> Piscine extérieure privée (ouverte toute l’année)</li>
+          <li><i class="fa-solid fa-wifi icon-large"></i> Connexion Wi-Fi gratuite dans tout l’établissement</li>
+          <li><i class="fa-solid fa-temperature-high icon-large"></i> Climatisation & chauffage</li>
+          <li><i class="fa-solid fa-square-parking icon-large"></i> Parking privé gratuit + borne de recharge électrique
+          </li>
+          <li><i class="fa-solid fa-plane-departure icon-large"></i> Navette aéroport disponible (en supplément)</li>
+          <li><i class="fa-solid fa-house-chimney-window icon-large"></i> Terrasse, jardin, mobilier d’extérieur &
+            barbecue</li>
+          <li><i class="fa-solid fa-child-reaching icon-large"></i> Chambres familiales & lit bébé disponible</li>
+          <li><i class="fa-solid fa-ban-smoking icon-large"></i> Établissement non-fumeurs</li>
+          <li><i class="fa-solid fa-dumbbell icon-large"></i> Cours de yoga, coach sportif personnel (en supplément)
+          </li>
+          <li><i class="fa-solid fa-spa icon-large"></i> Bain en plein air & chaises longues/parasols</li>
+          <li><i class="fa-solid fa-kitchen-set icon-large"></i> Cuisine équipée : four, micro-ondes, lave-vaisselle,
+            lave-linge, sèche-linge, cafetière</li>
+          <li><i class="fa-solid fa-tv icon-large"></i> TV écran plat, câble/satellite, service de streaming (ex.
+            Netflix)
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-map-location-dot icon-large"></i> Activités à proximité</h3>
+        <ul>
+          <li><i class="fa-solid fa-person-biking icon-large"></i> Cyclisme & randonnées</li>
+          <li><i class="fa-solid fa-person-swimming icon-large"></i> Planche à voile (en supplément)</li>
+          <li><i class="fa-solid fa-golf-ball-tee icon-large"></i> Golf de Mogador à 12 km</li>
+          <li><i class="fa-solid fa-person-walking icon-large"></i> Balades à pied, visites à vélo</li>
+          <li><i class="fa-solid fa-utensils icon-large"></i> Petit-déjeuner à la carte, continental ou complet servi
+            sur
+            place</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-map-pin icon-large"></i> Localisation & Transports</h3>
+        <ul>
+          <li><i class="fa-solid fa-location-dot icon-large"></i> Essaouira, à 6 km de l’aéroport Essaouira-Mogador</li>
+          <li><i class="fa-solid fa-car icon-large"></i> Location de voitures & vélos disponible sur place</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-lock icon-large"></i> Sécurité & Divers</h3>
+        <ul>
+          <li><i class="fa-solid fa-shield-halved icon-large"></i> Sécurité 24h/24, caméras, détecteurs de fumée</li>
+          <li><i class="fa-solid fa-universal-access icon-large"></i> Accessible PMR – logement de plain-pied</li>
+          <li><i class="fa-solid fa-clock icon-large"></i> Réception ouverte 24h/24, service de conciergerie</li>
+          <li><i class="fa-solid fa-language icon-large"></i> Langues parlées : Arabe, Français, Anglais</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-ban icon-large"></i> Règlement de la maison</h3>
+        <ul>
+          <li><i class="fa-solid fa-circle-info icon-large"></i> Pas de fêtes ou événements autorisés</li>
+          <li><i class="fa-solid fa-volume-xmark icon-large"></i> Heures calmes : entre 01h00 et 07h00</li>
+          <li><i class="fa-solid fa-smoking-ban icon-large"></i> Interdiction de fumer dans l'établissement</li>
+          <li><i class="fa-solid fa-user-check icon-large"></i> Aucune restriction d'âge à l'enregistrement</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-language icon-large"></i> Langues parlées</h3>
+        <ul>
+          <li>Arabe, Français, Anglais</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="appartement-contact">
+      Intéressé par ce bien ? <br>
+      Contactez-nous dès aujourd'hui à <strong>info@tigmino.ma</strong> ou via WhatsApp au <strong>+212 6 74 60 20
+        18</strong> pour plus d'informations ou programmer une visite.
+    </div>
+
+
+
+
+
+    <div class="CONTACTMAP">
+      <!-- Contact Form -->
+      <div class="tigmino-contact">
+        <form id="settings-form" method="POST" action="/Réglages">
+          <h2>Ajouter une demande</h2>
+
+          <label>Nom · Prénom</label>
+          <input type="text" name="name" placeholder="Nom · Prénom" required>
+
+          <label>Téléphone</label>
+          <input type="text" name="phone" placeholder="Téléphone" required>
+
+          <label>Message</label>
+          <textarea name="message" required></textarea>
+
+          {% if not session.username %}
+          <h2>Connectez-vous au TIGMINO</h2>
+          {% else %}
+          <button class="save-btn" type="submit">SAUVEGARDER</button>
+          {% endif %}
+        </form>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6065.613737865853!2d-9.673634224552472!3d31.435867066423594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdad8f00005250b5%3A0x5fe3798ffe352fbe!2sVilla%20serinie!5e0!3m2!1sfr!2sma!4v1750022977503!5m2!1sfr!2sma"
+          width="500px" height="460px" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </iframe>
+      </div>
+    </div>
+
+
+  </main>
+
+
+
+  <script src="../../static/Script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+</html>

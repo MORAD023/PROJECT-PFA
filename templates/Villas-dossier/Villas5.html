@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../../static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+       <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <main class="appartement-fiche">
+    <h1 class="appartement-titre">Villa Camélia des 3 Z-Marrakech</h1>
+    <div class="appartement-meta">Villa à vendre </div>
+    <p class="PRICEMAD"><strong> Prix :</strong> 2 750 000 MAD</p>
+    <!-- Main image -->
+    <div class="appartement-group">
+      <div class="photo-viewer">
+        <img id="mainImage" src="/static/Villas5-images/Villa Camélia des 3 Z-photo1.jpg" alt="Image principale">
+
+        <div class="left-line"></div>
+        <div class="right-line"></div>
+      </div>
+
+      <!-- Thumbnail gallery -->
+      <div class="appartement-galerie">
+        <div>
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo1.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo2.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo3.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo4.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo5.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo6.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo7.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo8.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo9.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo10.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo11.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo12.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo13.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo14.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo15.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo16.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo17.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo18.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo19.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo20.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo21.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo22.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo23.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo24.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo25.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo26.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo27.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo28.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas5-images/Villa Camélia des 3 Z-photo29.jpg" onclick="switchPhoto(this)">
+        </div>
+      </div>
+    </div>
+    <div class="appartement-description">
+      Situé à Marrakech, l’hébergement Villa Camélia des 3 Z offre une vue sur la piscine. Il propose une piscine
+      extérieure, un jardin, une terrasse et une connexion Wi-Fi gratuite. Cette villa possède un parking privé gratuit
+      et une réception ouverte 24h/24.
+
+      Cette villa avec climatisation se compose de 3 chambres, d'un salon, d'une cuisine entièrement équipée avec un
+      réfrigérateur et une machine à café, ainsi que de 3 salles de bains avec un bidet et une douche. Des serviettes et
+      du linge de lit sont disponibles.
+
+      Un petit-déjeuner continental est servi sur place.
+
+      L’établissement Villa Camélia des 3 Z dispose d’un spa. L’établissement Villa Camélia des 3 Z dispose d’un parc
+      aquatique.
+
+      Vous séjournerez à respectivement 8,1 km et 8,5 km de ces lieux d’intérêt : Musée Yves Saint Laurent de Marrakech
+      et Jardin Majorelle. L'aéroport le plus proche (Aéroport Marrakech-Ménara) est à 12 km. Un service de navette
+      aéroport payant peut être assuré par l’établissement.
+    </div>
+
+    <div class="appartement-details">
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Détails de la Villa</h3>
+        <p><i class="fa-solid fa-water-ladder icon-large"></i> <strong> Piscines :</strong> 2 piscines extérieures
+          privées, ouvertes toute l’année</p>
+        <p><i class="fa-solid fa-wifi icon-large"></i> <strong> Wi-Fi :</strong> Gratuite dans tout
+          l’établissement</p>
+        <p><i class="fa-solid fa-spa icon-large"></i> <strong> Spa :</strong> Spa, hammam, coin relaxation et salle de
+          sport</p>
+        <p><i class="fa-solid fa-shuttle-van icon-large"></i> <strong>Navette aéroport:</strong> Disponible (en
+          supplément)</p>
+        <p><i class="fa-solid fa-square-parking icon-large"></i> <strong> Parking :</strong> Gratuit, privé, sans
+          réservation</p>
+        <p><i class="fa-solid fa-people-group icon-large"></i> <strong> Capacité :</strong> Jusqu’à 6 adultes et 2
+          enfants</p>
+        <p><i class="fa-solid fa-money-bill-wave icon-large"></i> <strong> Prix :</strong> À partir de <strong>2 750 000
+            MAD</strong></p>
+        <p><i class="fa-solid fa-house icon-large"></i> <strong> Villa :</strong> 3 chambres, salon, cuisine équipée,
+          terrasse, jardin</p>
+        <p><i class="fa-solid fa-bed icon-large"></i> <strong> Literie :</strong><br>
+          • Chambre 1 : 1 très grand lit double<br>
+          • Chambre 2 : 2 lits simples<br>
+          • Chambre 3 : 1 grand lit double<br>
+          • Salon : 2 canapés-lits</p>
+        <p><i class="fa-solid fa-temperature-high icon-large"></i> <strong> Climatisation :</strong> Oui</p>
+        <p><i class="fa-solid fa-bath icon-large"></i> <strong> Salle de bains :</strong> 3 salles de bains avec
+          baignoire
+          ou douche, bidet, serviettes et articles de toilette</p>
+        <p><i class="fa-solid fa-kitchen-set icon-large"></i> <strong> Cuisine :</strong> Cuisine complète
+          (réfrigérateur,
+          micro-ondes, four, machine à café, bouilloire, plaque de cuisson, lave-linge, ustensiles)</p>
+        <p><i class="fa-solid fa-tv icon-large"></i> <strong> Télévision :</strong> Écran plat avec chaînes satellite et
+          service de streaming (ex. Netflix)</p>
+        <p><i class="fa-solid fa-umbrella-beach icon-large"></i> <strong> Terrasse :</strong> Meublée, avec barbecue,
+          vue
+          sur la piscine et le jardin</p>
+        <p><i class="fa-solid fa-baby icon-large"></i> <strong> Lit bébé :</strong> Gratuit, toujours disponible</p>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Équipements & Services</h3>
+        <ul>
+          <li><i class="fa-solid fa-chair icon-large"></i> Coin salon, salle à manger, mobilier extérieur</li>
+          <li><i class="fa-solid fa-dumbbell icon-large"></i> Salle de sport et coin relaxation</li>
+          <li><i class="fa-solid fa-shield-halved icon-large"></i> Sécurité 24h/24 avec caméras de surveillance</li>
+          <li><i class="fa-solid fa-store icon-large"></i> Salon de coiffure et institut de beauté</li>
+          <li><i class="fa-solid fa-person-hiking icon-large"></i> Activités : balades, visites guidées, parc aquatique,
+            minigolf</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-user-shield icon-large"></i> Conditions de l’établissement</h3>
+        <ul>
+          <li><i class="fa-solid fa-child icon-large"></i> Tous les enfants sont les bienvenus</li>
+          <li><i class="fa-solid fa-baby icon-large"></i> Lit bébé gratuit disponible sur demande</li>
+          <li><i class="fa-solid fa-ban icon-large"></i> Fêtes et événements non autorisés</li>
+          <li><i class="fa-solid fa-bell-slash icon-large"></i> Heures silencieuses : 21h00 à 09h00</li>
+          <li><i class="fa-solid fa-smoking icon-large"></i> Hébergement non-fumeurs</li>
+          <li><i class="fa-solid fa-dog icon-large"></i> Animaux admis sans supplément</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-language icon-large"></i> Langues parlées</h3>
+        <ul>
+          <li>Arabe, Anglais, Français</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="appartement-contact">
+      Intéressé par ce bien ? <br>
+      Contactez-nous dès aujourd'hui à <strong>info@tigmino.ma</strong> ou via WhatsApp au <strong>+212 6 74 60 20
+        18</strong> pour plus d'informations ou programmer une visite.
+    </div>
+
+
+
+
+
+
+    <div class="CONTACTMAP">
+      <!-- Contact Form -->
+      <div class="tigmino-contact">
+        <form id="settings-form" method="POST" action="/Réglages">
+          <h2>Ajouter une demande</h2>
+
+          <label>Nom · Prénom</label>
+          <input type="text" name="name" placeholder="Nom · Prénom" required>
+
+          <label>Téléphone</label>
+          <input type="text" name="phone" placeholder="Téléphone" required>
+
+          <label>Message</label>
+          <textarea name="message" required></textarea>
+
+          {% if not session.username %}
+          <h2>Connectez-vous au TIGMINO</h2>
+          {% else %}
+          <button class="save-btn" type="submit">SAUVEGARDER</button>
+          {% endif %}
+        </form>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3396.876973811184!2d-7.930555324544042!3d31.637218674160664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdaff1848c956517%3A0x6dd91696c9a671f5!2sVilla%20Cam%C3%A9lia!5e0!3m2!1sfr!2sma!4v1750021076883!5m2!1sfr!2sma"
+          width="500px" height="460px" style="border:0;" allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </iframe>
+      </div>
+    </div>
+
+
+  </main>
+
+
+
+  <script src="../../static/Script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+</html>

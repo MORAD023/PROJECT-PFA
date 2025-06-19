@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../../static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+       <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+  <main class="appartement-fiche">
+    <h1 class="appartement-titre">Zephyr Agadir</h1>
+    <div class="appartement-meta">Appartement à vendre</div>
+    <p class="PRICEMAD"><strong> Prix :</strong> 980 000 MAD</p>
+
+    <div class="appartement-group">
+      <div class="photo-viewer">
+        <img id="mainImage" src="/static/Appartements2-images/Zephyr-Agadir-Photo1.jpg" alt="Image principale">
+
+        <div class="left-line"></div>
+        <div class="right-line"></div>
+      </div>
+
+      <!-- Gallery Thumbnails -->
+      <div class="appartement-galerie">
+        <div>
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo1.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo2.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo3.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo4.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo5.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo6.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo7.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo8.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo9.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo10.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo11.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo12.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo13.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo14.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo15.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo16.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo17.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo18.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo19.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo20.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo21.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo22.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo23.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo24.jpg" onclick="switchPhoto(this)">
+        </div>
+      </div>
+    </div>
+    <div class="appartement-description">
+      Les réductions Genius proposées par cet établissement dépendent des dates de réservation, des dates de séjour et
+      des autres offres disponibles.
+
+      L’établissement Zephyr Agadir bénéficie d’un emplacement attractif dans le quartier Founty de Agadir, à
+      respectivement 1,7 km, 3,2 km et 3,4 km de ces lieux d’intérêt : Plage d’Agadir, Musee du Patrimoine Amazigh
+      d'Agadir et Medina Polizzi. Cet hôtel 4 étoiles propose une piscine extérieure ainsi que des hébergements dotés
+      de
+      la climatisation, d’une connexion Wi-Fi gratuite et d’une salle de bains privative. Un parking privé est
+      disponible sur place.
+
+      Les hébergements comprennent une armoire. Vous bénéficierez d'un bureau et d’une télévision à écran plat.
+      Certains
+      hébergements possèdent une terrasse. Des serviettes et du linge de lit sont fournis.
+
+      L’établissement Zephyr Agadir sert un petit-déjeuner à la carte ou continental.
+
+      Parlant arabe, anglais et français, le personnel de la réception ouverte 24h/24 se fera un plaisir de vous
+      renseigner à toute heure de la journée.
+
+      Vous séjournerez à respectivement 4 km et 5,3 km de ces lieux d’intérêt : La Medina d'Agadir et Marina d'Agadir.
+      L'aéroport le plus proche (Aéroport d'Agadir-Al Massira) est à 18 km.
+    </div>
+
+    <div class="appartement-details">
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Détails de l'Appartement</h3>
+        <p><i class="fa-solid fa-ruler-combined icon-large"></i> <strong>Surface :</strong> Varie selon l’appartement
+          (entre 45 m² et 110 m²)</p>
+        <p><i class="fa-solid fa-bed icon-large"></i> <strong>Chambres :</strong> de 1 à 3 chambres selon le logement
+        </p>
+        <p><i class="fa-solid fa-bath icon-large"></i> <strong>Salles de bain :</strong> 1 par appartement</p>
+        <p><i class="fa-solid fa-umbrella-beach icon-large"></i> <strong>Terrasse :</strong> Oui, dans certaines unités
+        </p>
+        <p><i class="fa-solid fa-mountain-city icon-large"></i> <strong>Vue :</strong> Ville ou jardin</p>
+        <p><i class="fa-solid fa-people-roof icon-large"></i> <strong>Capacité :</strong> Jusqu’à 6 adultes + 2 enfants
+        </p>
+        <p><i class="fa-solid fa-money-bill-wave icon-large"></i> <strong>Prix :</strong> à partir de 980 000 MAD</p>
+        <p><i class="fa-solid fa-hashtag icon-large"></i> <strong>Référence :</strong> TG1002</p>
+
+        <p><i class="fa-solid fa-location-dot icon-large"></i> <strong>Situation :</strong> Quartier Founty – à
+          proximité
+          de la plage, musée, et Médina Polizzi</p>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-door-open icon-large"></i> Options d'hébergement</h3>
+        <ul>
+          <li>Appartement 1 chambre – 2 adultes + 2 enfants</li>
+          <li>Appartement 2 chambres – 4 adultes + 2 enfants</li>
+          <li>Appartement 3 chambres – 6 adultes + 2 enfants</li>
+          <li>Chambre lits jumeaux – 2 adultes + 1 enfant</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-star icon-large"></i> Points forts</h3>
+        <ul>
+          <li><i class="fa-solid fa-swimming-pool icon-large"></i> Piscine extérieure ouverte toute l’année</li>
+          <li><i class="fa-solid fa-wifi icon-large"></i> Connexion Wi-Fi gratuite</li>
+          <li><i class="fa-solid fa-temperature-high icon-large"></i> Climatisation et chauffage</li>
+          <li><i class="fa-solid fa-square-parking icon-large"></i> Parking privé sur place (4 € / jour)</li>
+          <li><i class="fa-solid fa-bell-concierge icon-large"></i> Réception ouverte 24h/24</li>
+          <li><i class="fa-solid fa-people-group icon-large"></i> Chambres familiales</li>
+          <li><i class="fa-solid fa-concierge-bell icon-large"></i> Service d’étage</li>
+          <li><i class="fa-solid fa-sun icon-large"></i> Terrasse bien exposée</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-toolbox icon-large"></i> Équipements</h3>
+        <ul>
+          <li><i class="fa-solid fa-tv icon-large"></i> Télévision à écran plat</li>
+          <li><i class="fa-solid fa-chair icon-large"></i> Bureau, coin salon, armoire</li>
+          <li><i class="fa-solid fa-soap icon-large"></i> Articles de toilette, linge, serviettes</li>
+          <li><i class="fa-solid fa-umbrella-beach icon-large"></i> Mobilier extérieur et parasols</li>
+          <li><i class="fa-solid fa-children icon-large"></i> Club pour enfants</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-universal-access icon-large"></i> Accessibilité et sécurité</h3>
+        <ul>
+          <li><i class="fa-solid fa-elevator icon-large"></i> Ascenseur</li>
+          <li><i class="fa-solid fa-shield-halved icon-large"></i> Sécurité 24h/24, extincteurs, détecteurs de fumée
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-child icon-large"></i> Conditions enfants & lits</h3>
+        <ul>
+          <li>Enfants bienvenus</li>
+          <li>Enfants de plus de 5 ans = tarif adulte</li>
+          <li>0–4 ans : lit bébé gratuit sur demande (selon disponibilité)</li>
+          <li>Aucun lit d’appoint disponible</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-gavel icon-large"></i> Conditions générales</h3>
+        <ul>
+          <li><i class="fa-solid fa-id-card icon-large"></i> Âge minimum pour l’enregistrement : 18 ans</li>
+          <li><i class="fa-solid fa-ban icon-large"></i> Les fêtes et événements sont interdits</li>
+          <li><i class="fa-solid fa-dog icon-large"></i> <strong>Animaux :</strong> non admis</li>
+        </ul>
+
+      </div>
+    </div>
+    <div class="appartement-contact">
+      Intéressé par ce bien ? <br>
+      Contactez-nous dès aujourd'hui à <strong>info@tigmino.ma</strong> ou via WhatsApp au <strong>+212 6 74 60 20
+        18</strong> pour plus d'informations ou programmer une visite.
+    </div>
+
+
+    <div class="CONTACTMAP">
+      <!-- Contact Form -->
+      <div class="tigmino-contact">
+        <form id="settings-form" method="POST" action="/Réglages">
+          <h2>Ajouter une demande</h2>
+
+          <label>Nom · Prénom</label>
+          <input type="text" name="name" placeholder="Nom · Prénom" required>
+
+          <label>Téléphone</label>
+          <input type="text" name="phone" placeholder="Téléphone" required>
+
+          <label>Message</label>
+          <textarea name="message" required></textarea>
+
+          {% if not session.username %}
+          <h2>Connectez-vous au TIGMINO</h2>
+          {% else %}
+          <button class="save-btn" type="submit">SAUVEGARDER</button>
+          {% endif %}
+        </form>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3441.249392310622!2d-9.590419624594906!3d30.400665374746115!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb3b7357c3cfb81%3A0x9e7ddaa0701740b8!2sZEPHYR%20Agadir!5e0!3m2!1sfr!2sma!4v1750009730254!5m2!1sfr!2sma"
+          width="500" height="460" style="border:0;" allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+
+  </main>
+
+
+
+  <script src="../../static/Script.js"></script>
+
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

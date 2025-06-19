@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+
+</head>
+
+<body>
+  <div class="hero">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+      <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+
+    <div class="hero-text">
+      <h1>TIGMINO</h1>
+      <p>Des maisons d'exception, pour des séjours inoubliables.<br>Vivez le Maroc, maison par maison.</p>
+
+      <div class="search-bar">
+        <form method="get" action="/results2">
+          <select name="type" required>
+            <option value="">Type de bien</option>
+            <option>Appartements</option>
+            <option>Maisons</option>
+            <option>Villas</option>
+          </select>
+
+          <select name="ville" required>
+            <option value="">Choisissez la Ville</option>
+            <option>Agadir</option>
+            <option>Marrakech</option>
+            <option>Casablanca</option>
+            <option>Rabat</option>
+            <option>Essaouira</option>
+            <option>Taghazout</option>
+          </select>
+
+          <select name="adultes" required>
+            <option value="">Adultes</option>
+            <option value="1">1 Adulte</option>
+            <option value="2">2 Adultes</option>
+            <option value="3">3 Adultes</option>
+            <option value="4">4 Adultes</option>
+            <option value="5">5 Adultes</option>
+            <option value="6">6 Adultes</option>
+          </select>
+
+          <select name="enfants" required>
+            <option value="">Enfants</option>
+            <option value="0">0 Enfant</option>
+            <option value="1">1 Enfant</option>
+            <option value="2">2 Enfants</option>
+            <option value="3">3 Enfants</option>
+            <option value="4">4 Enfants</option>
+          </select>
+
+          <button style="background-color: rgb(143, 7, 206);" type="submit">Rechercher</button>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+
+ 
+
+
+
+  <section class="section">
+    <h2>Nos biens par catégorie</h2>
+    <div class="categories">
+      <div class="category">
+        <div class="category-icon"><img src="/static/Appartement'icone.png" style="height: 50px; width: 50px;" alt="Appartement'icone"></div>
+        <h3>Appartements</h3>
+        <span>18 annonces</span>
+      </div>
+      <div class="category">
+        <div class="category-icon"><img src="/static/Maison'icone.png" style="height: 50px; width: 50px;" alt="Maison'icone"></div>
+        <h3>Maisons</h3>
+        <span>18 annonces</span>
+      </div>
+      <div class="category">
+        <div class="category-icon" ><img src="/static/Villa'icone.png" style="height: 50px; width: 50px;" alt="Villa'icone"></div>
+        <h3>Villas</h3>
+        <span>18 annonces</span>
+      </div>
+    </div>
+  </section>
+
+   
+  <section class="section">
+    <h2>Nos biens recents</h2>
+    <div class="filters">
+      <button class="filter-btn">Appartements</button>
+      <button class="filter-btn">Maisons</button>
+      <button class="filter-btn">Villas</button>
+    </div>
+
+
+    <div class="content">
+      <div class="cards">
+        <div class="card">
+          <a href="/Appartements06" class="card">
+            <img src="/static/Appartements6-images/Bouad Seafront-photo1.jpg" alt="Bouad Seafront apartment Taghazout">
+          </a>
+          <div class="card-content">
+            <h2>Bouad Seafront apartment Taghazout</h2>
+            <p>🌍 Hash Point, 65100 Taghazout, Maroc</p>
+            <p>Appartements en bord de mer à Taghazout, à 19 km d’Agadir. Hébergements avec cuisine, coin repas, salle
+              de
+              bains privative. Barbecue sur place, location de voitures disponible.</p>
+
+            <p class="PRICEMAD"><strong> Prix :</strong> 750 000 MAD</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <a href="/Maisons6" class="card">
+            <img src="/static/Maisons6-images/Riad Dar Sarah-photo1.jpg" alt="Riad Dar Sarah">
+          </a>
+          <div class="card-content">
+            <h2>Riad Dar Sarah-Taghazout</h2>
+            <p>🌍 Ait Bihi, 80022 Taghazout, Maroc</p>
+            <p>Riad de charme à Taghazout avec chambres vue montagne, piscine intérieure, terrasse, jardin et restaurant
+              marocain.</p>
+            <p class="PRICEMAD"><strong> Prix :</strong> 1 330 000 MAD</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <a href="/Villas10" class="card">
+            <img src="/static/Villas10-images/Villa Serinie-photo1.jpg" alt="Villa Serinie">
+          </a>
+          <div class="card-content">
+            <h2>Villa Serinie-Essaouira</h2>
+            <p>🌍 P2212, 44000 Essaouira, Maroc</p>
+            <p>Villa à Essaouira : 4 chambres, 4 SDB, climatisation, Wi‑Fi gratuit, salon, cuisine entièrement équipée,
+              télévision à écran plat, jardin, terrasse avec vue sur la montagne. Piscine extérieure privée.</p>
+            <p class="PRICEMAD"><strong> Prix :</strong>2 725 000 MAD</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="content">
+
+      <div class="cards">
+        <div class="card">
+          <a href="/Appartements012" class="card">
+            <img src="/static/Appartements12-images/Mogador apartment-photo1.jpg"
+              alt="Sea view Mogador apartment Essaouira">
+          </a>
+          <div class="card-content">
+            <h2>Sea view Mogador apartment Essaouira</h2>
+            <p>🌍 شارع محمد الخامس, 44100 Essaouira, Maroc</p>
+            <p>Sea view apartment Mogador à Essaouira, à 500 m de la plage. Appartement 1 chambre avec piscine privée,
+              jardin, Wi-Fi gratuit et parking privé. Cuisine équipée, 2 salles de bains, linge et articles de toilette
+              fournis.</p>
+
+            <p class="PRICEMAD"><strong> Prix :</strong> 1 050 000 MAD</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <a href="/Maisons9" class="card">
+            <img src="/static/Maisons9-images/Auberge Les Montagnes du Paradis-photo1.jpg"
+              alt="Auberge Les Montagnes du Paradis-Agadir">
+          </a>
+          <div class="card-content">
+            <h2>Auberge Les Montagnes du Paradis-Agadir</h2>
+            <p>🌍 route imouzzer ida ou tanane à la vallée du paradis 40 km - Agadir, 80300 Agadir, Maroc</p>
+            <p>Auberge chaleureuse à Agadir, nichée dans la Vallée du Paradis, avec piscine extérieure, jardin, terrasse
+              et Wi-Fi gratuit.</p>
+            <p class="PRICEMAD"><strong> Prix :</strong> 850 000 MAD</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <a href="/Villas3" class="card">
+            <img src="/static/Villas3-images/Villa Nawal-photo1.jpg" alt="Villa Nawal-Agadi">
+          </a>
+          <div class="card-content">
+            <h2>Villa Nawal-Agadir</h2>
+            <p>🌍 Villa 8 Dyar Shemsi, 83005 Agadir, Maroc</p>
+            <p>Villa à Agadir : 2 chambres, 2 SDB, clim., Wi‑Fi, salon, cuisine équipée, piscine privée chauffée sans
+              vis-à-vis, terrasse, jardin, parking gratuit.</p>
+
+
+            <p class="PRICEMAD"><strong> Prix :</strong> 3 200 000 MAD</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="content">
+
+      <div class="cards">
+        <div class="card">
+          <a href="/Appartements05" class="card">
+            <img src="/static/Appartements5-images/Tamourrit Apartment-photo1.jpg"
+              alt="Tamourrit Appartement Taghazout">
+          </a>
+          <div class="card-content">
+            <h2>Tamourrit Apartment Taghazout</h2>
+            <p>🌍 Rue Taghazot, 80022 Taghazout, Maroc</p>
+            <p>Appartement à Taghazout : 1 chambre, 2 salles de bains, cuisine entièrement équipée (réfrigérateur,
+              machine
+              à café), salon, balcon avec vue sur la mer, terrasse, jardin. Accès direct à la plage, piscine extérieure,
+              climatisation, Wi‑Fi gratuit, parking privé.</p>
+
+            <p class="PRICEMAD"><strong> Prix :</strong> 1 200 000 MAD</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <a href="/Maisons8" class="card">
+            <img src="/static/Maisons8-images/LHOSTEL à Casablanca-photo1.jpg" alt="LHOSTEL à Casablanca">
+          </a>
+          <div class="card-content">
+            <h2>LHOSTEL à Casablanca</h2>
+            <p>🌍 6, rue d'Aix Oasis, Maârif, 20410 Casablanca, Maroc</p>
+            <p>Auberge conviviale à Casablanca avec jardin, terrasse, cuisine commune et Wi-Fi gratuit. Petit-déjeuner
+              buffet, parking privé, proche centre-ville et transports.</p>
+            <p class="PRICEMAD"><strong> Prix :</strong> 580 000 MAD</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <a href="/Villas7" class="card">
+            <img src="/static/Villas7-images/SUPERBE VILLA-photo1.jpg" alt="SUPERBE VILLA">
+          </a>
+          <div class="card-content">
+            <h2>SUPERBE VILLA-Rabat</h2>
+            <p>🌍 VILLA 54 A2B, 10000 Rabat, Maroc</p>
+            <p>Villa à Rabat : 3 chambres, 1 SDB, clim., Wi‑Fi, salon, cuisine équipée, piscine privée intérieure et
+              extérieure, bain à remous, terrasse, jardin, barbecue, parking gratuit. À quelques pas de la plage des
+              Nations.</p>
+
+            <p class="PRICEMAD"><strong> Prix :</strong> 3 560 000 MAD</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="cards">
+        <div class="card">
+          <a href="/Appartements01" class="card">
+            <img src="/static/Appartements1-images/Agadir-photo1.jpg" alt="Marina Apartment Agadir">
+          </a>
+          <div class="card-content">
+            <h2>Marina Apartment Agadir</h2>
+            <p>🌍 Marina Agadir Morocco, 80000 Agadir, Maroc</p>
+            <p>Appartement à Agadir : 2 chambres, 1 salle de bains, salon, cuisine équipée, climatisation, Wi-Fi
+              gratuit,
+              piscine intérieure et extérieure, terrasse, jardin. Situé en bord de mer.</p>
+
+            <p class="PRICEMAD"><strong> Prix :</strong> 1 450 000 MAD</p>
+
+          </div>
+        </div>
+
+        <div class="card">
+          <a href="/Maisons7" class="card">
+            <img src="/static/Maisons7-images/Dar Tahra-photo1.jpg" alt="Dar Tahra">
+          </a>
+          <div class="card-content">
+            <h2>Dar Tahra-Casablanca</h2>
+            <p>🌍 78, Boulevard Dammam Angle Bd Panoramique. Technopark , Aïn Chock, 20000 Casablanca, Maroc</p>
+            <p>Maison d’hôtes de charme à 15 min du centre de Casablanca, avec jardin, piscine extérieure, hammam et
+              salons marocains. Chambres climatisées avec vue, Wi-Fi gratuit.</p>
+            <p class="PRICEMAD"><strong> Prix :</strong> 1 270 000 MAD</p>
+          </div>
+        </div>
+
+
+
+        <div class="card">
+          <a href="/Villas2" class="card">
+            <img src="/static/Villas2-images/Villa de Luxe piscine privée-photo1.jpg"
+              alt="Villa de Luxe piscine privée">
+          </a>
+          <div class="card-content">
+            <h2>Villa de Luxe piscine privée-Casablanca</h2>
+            <p>🌍 Villa N 14 Residence Hyde Park Bouskoura Casablanca, 27182 Casablanca, Maroc</p>
+            <p>Villa à Casablanca : 3 chambres, clim., Wi‑Fi, TV, cuisine équipée, 4 salles de bain,
+              piscine extérieure & privée, jardin, terrasse, parking gratuit, 19 km de la
+              Mosquée Hassan II.</p>
+            <p class="PRICEMAD"><strong> Prix :</strong> 3 916 000 MAD</p>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="content">
+      <div class="cards">
+        <div class="card">
+          <a href="/Appartements04" class="card">
+            <img src="/static/Appartements4-images/Luxurious Sea-View 2Br-photo1.jpg"
+              alt="Luxurious Sea-View 2Br Apartment Agadir">
+          </a>
+          <div class="card-content">
+            <h2>Luxurious Sea-View 2Br Apartment Agadir</h2>
+            <p>🌍 RBoite postale 1138 poste principale agadir, Founty, 80000 Agadir, Maroc</p>
+            <p>Appartement Luxueux à Agadir : 2 chambres, cuisine équipée, climatisation,
+              Wi‑Fi gratuit, télévision par satellite, terrasse avec vue sur la mer et la ville. Piscine extérieure,
+              jardin, parking privé gratuit.</p>
+
+            <p class="PRICEMAD"><strong> Prix :</strong> 1 450 000 MAD</p>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <a href="/Maisons5" class="card">
+            <img src="/static/Maisons5-images/Single fin taghazout surf & stay-photo1.jpg"
+              alt="Single fin taghazout surf & stay">
+          </a>
+          <div class="card-content">
+            <h2>Single fin taghazout surf & stay</h2>
+            <p>🌍 Centre Taghazout, 80022 Taghazout, Maroc</p>
+            <p>Auberge surf & détente à Taghazout, chambres avec vue montagne, piscine intérieure, terrasse et cuisine
+              commune.</p>
+
+            <p class="PRICEMAD"><strong> Prix :</strong> 2 500 000 MAD</p>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <a href="/Villas4" class="card">
+            <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo1.jpg" alt="Villa Palmeraie Golf Agadir">
+          </a>
+          <div class="card-content">
+            <h2>Villa Palmeraie Golf Agadir</h2>
+            <p>🌍 Domaine la palmeraie II Aghroude Bensergao Villa 16, 80100 Agadir, Maroc</p>
+            <p>Villa à Agadir : 4 chambres, 3 SDB, clim., Wi‑Fi, salon, cuisine équipée, piscine privée, terrasse,
+              jardin,
+              parking gratuit.</p>
+
+
+            <p class="PRICEMAD"><strong> Prix :</strong> 3 234 000 MAD</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="content">
+      <div class="cards">
+        <div class="card">
+          <a href="/Appartements03" class="card">
+            <img src="/static/Appartements3-images/ISLAN bay-photo1.jpg" alt="ISLAN bay apartment Agadir">
+          </a>
+          <div class="card-content">
+            <h2>ISLAN bay apartment Agadir</h2>
+            <p>🌍 Residence ISLAN GH26, 80023 Agadir, Maroc</p>
+            <p>Appartement ISLAN Bay à Agadir : 1 chambre, salon, kitchenette, climatisation, Wi‑Fi gratuit, télévision
+              à
+              écran plat. Piscine privée, balcon et parking privé gratuit.</p>
+
+            <p class="PRICEMAD"><strong> Prix :</strong> 720 000 MAD</p>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <a href="/Maisons12" class="card">
+            <img src="/static/Maisons12-images/RIAD MAROSKO-photo1.jpg" alt="RIAD MAROSKO Essaouira">
+          </a>
+          <div class="card-content">
+            <h2>RIAD MAROSKO-Essaouira</h2>
+            <p>🌍 66 Rue d'Agadir, Ahl Agadir, 44000 Essaouira, Maroc</p>
+            <p>Maison d’hôtes à Essaouira, quartier Ahl Agadir, avec patio, terrasse, Wi-Fi gratuit et petit-déjeuner
+              servi sur place.</p>
+            <p class="PRICEMAD"><strong> Prix :</strong> 968 000 MAD</p>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <a href="/Villas11" class="card">
+            <img src="/static/Villas11-images/Kiola Villa-photo1.jpg" alt="Kiola Villa-Taghazout">
+          </a>
+          <div class="card-content">
+            <h2>Kiola Villa-Taghazout</h2>
+            <p>🌍 Ifraden Taghazout, 80022 Taghazout, Maroc</p>
+            <p>Villa à Taghazout : 4 chambres, 4 salles de bains, climatisation, Wi-Fi gratuit, piscine extérieure
+              privée, jardin, terrasse avec vue sur la mer, parking privé gratuit, à proximité de
+              l’Atlantica Parc Aquatique.</p>
+            <p class="PRICEMAD"><strong> Prix :</strong>5 800 000 MAD</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+<section class="realestate-results">
+
+    <div class="realestate-options">
+      <div class="realestate-intro">
+        <p class="how-it-works">Comment ça marche ?</p>
+        <h3 class="ready-title">Prêt à trouver votre futur bien ?</h3>
+        <p class="ready-description">
+          Trouvez ou vendez votre bien immobilier facilement avec nos services experts dans l'achat, la vente et la
+          location d'appartements, maisons et villas.
+        </p>
+      </div>
+
+      <div class="realestate-services">
+        <div class="service-item">
+          <span class="service-icon">🏠</span>
+          <div>
+            <h4 class="service-title">Location rapide</h4>
+            <p class="service-desc">Trouvez des biens à louer dans les meilleures zones urbaines et résidentielles.</p>
+          </div>
+        </div>
+        <div class="service-item">
+          <span class="service-icon">💼</span>
+          <div>
+            <h4 class="service-title">Vente et achat simplifiés</h4>
+            <p class="service-desc">Confiez-nous votre projet d'achat ou de vente, on s'occupe du reste.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <script src="../static/script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

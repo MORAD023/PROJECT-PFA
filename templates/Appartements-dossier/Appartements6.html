@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../../static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+       <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  <main class="appartement-fiche">
+    <h1 class="appartement-titre">Bouad Seafront Apartment-Taghazout</h1>
+    <div class="appartement-meta">Appartement à vendre</div>
+    <p class="PRICEMAD"><strong> Prix :</strong> 750 000 MAD</p>
+
+    <div class="appartement-group">
+      <div class="photo-viewer">
+        <img id="mainImage" src="/static/Appartements6-images/Bouad Seafront-photo1.jpg" alt="Image principale">
+
+        <div class="left-line"></div>
+        <div class="right-line"></div>
+      </div>
+
+      <div class="appartement-galerie">
+        <div>
+          <img src="/static/Appartements6-images/Bouad Seafront-photo1.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo2.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo3.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo4.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo5.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements6-images/Bouad Seafront-photo6.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo7.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo8.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo9.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo10.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements6-images/Bouad Seafront-photo11.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo12.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo13.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo14.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo15.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements6-images/Bouad Seafront-photo16.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo17.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo18.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo19.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo20.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements6-images/Bouad Seafront-photo21.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo22.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo23.jpg" onclick="switchPhoto(this)">
+        </div>
+      </div>
+    </div>
+    <div class="appartement-description">
+      Le Bouad Seafront Apartments & Rooms propose un hébergement à Taghazout, à 19 km d'Agadir.
+
+      Le logement comprend un coin repas, une cuisine et une salle de bains privative. Le Bouad Seafront Apartments &
+      Rooms possède également un barbecue.
+
+      Un service de location de voitures est assuré sur place. La région est prisée des amateurs d'équitation.
+      L'aéroport d'Agadir-Al Massira est implanté à 37 km.
+
+    </div>
+
+    <div class="appartement-details">
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Détails de l'Appartement</h3>
+        <p><i class="fa-solid fa-ruler-combined icon-large"></i> <strong>Surface :</strong> Varie selon l’appartement
+          (60–100 m²)</p>
+        <p><i class="fa-solid fa-bed icon-large"></i> <strong>Chambres :</strong> Jusqu’à 3 selon la formule</p>
+        <p><i class="fa-solid fa-bath icon-large"></i> <strong>Salles de bain :</strong> 1 par appartement</p>
+        <p><i class="fa-solid fa-umbrella-beach icon-large"></i> <strong>Terrasse / Balcon :</strong> Oui (certaines
+          avec
+          vue mer)</p>
+        <p><i class="fa-solid fa-water icon-large"></i> <strong>Vue :</strong> Mer</p>
+        <p><i class="fa-solid fa-users icon-large"></i> <strong>Capacité :</strong> 2 à 6 adultes + enfants</p>
+        <p><i class="fa-solid fa-money-bill-wave icon-large"></i> <strong>Prix :</strong> à partir de 750 000 MAD</p>
+        <p><i class="fa-solid fa-hashtag icon-large"></i> <strong>Référence :</strong> TG1006</p>
+
+        <p><i class="fa-solid fa-location-dot icon-large"></i> <strong>Situation :</strong> Taghazout – 19 km d’Agadir,
+          37 km aéroport. Plage immédiate.</p>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-door-open icon-large"></i> Types d'hébergement</h3>
+        <ul>
+          <li><i class="fa-solid fa-bed icon-large"></i> 3 chambres : 2 adultes + 1 enfant</li>
+          <li><i class="fa-solid fa-bed icon-large"></i> 2 chambres : 2 adultes + 1 enfant</li>
+          <li><i class="fa-solid fa-star icon-large"></i> Grand standing vue mer : 1 adultes + 1 enfant</li>
+          <li><i class="fa-solid fa-hotel icon-large"></i> Double deluxe vue mer : 1 adultes</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-star icon-large"></i> Points forts</h3>
+        <ul>
+          <li><i class="fa-solid fa-water icon-large"></i> En bord de mer</li>
+          <li><i class="fa-solid fa-utensils icon-large"></i> Restaurant, petit-déjeuner</li>
+          <li><i class="fa-solid fa-wifi icon-large"></i> Wi-Fi parties communes</li>
+          <li><i class="fa-solid fa-sun icon-large"></i> Barbecue, terrasse exposée</li>
+          <li><i class="fa-solid fa-van-shuttle icon-large"></i> Navette aéroport</li>
+          <li><i class="fa-solid fa-people-roof icon-large"></i> Chambres familiales</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-screwdriver-wrench icon-large"></i> Équipements</h3>
+        <ul>
+          <li><i class="fa-solid fa-kitchen-set icon-large"></i> Cuisine/kitchenette</li>
+          <li><i class="fa-solid fa-blender icon-large"></i> Ustensiles, réfrigérateur, sèche-linge</li>
+          <li><i class="fa-solid fa-tv icon-large"></i> TV, coin salon, salle à manger</li>
+          <li><i class="fa-solid fa-burger icon-large"></i> Barbecue, mobilier extérieur</li>
+          <li><i class="fa-solid fa-temperature-high icon-large"></i> Chauffage, insonorisation</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-person-hiking icon-large"></i> Activités</h3>
+        <ul>
+          <li><i class="fa-solid fa-water icon-large"></i> Plage, sports nautiques (supplément)</li>
+          <li><i class="fa-solid fa-horse icon-large"></i> Équitation, randonnée, golf</li>
+          <li><i class="fa-solid fa-landmark icon-large"></i> Visites culturelles</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Services</h3>
+        <ul>
+          <li><i class="fa-solid fa-car icon-large"></i> Location de voitures</li>
+          <li><i class="fa-solid fa-van-shuttle icon-large"></i> Navette aéroport (supplément)</li>
+          <li><i class="fa-solid fa-suitcase-rolling icon-large"></i> Bagagerie, conciergerie</li>
+          <li><i class="fa-solid fa-utensils icon-large"></i> Restauration, panier-repas, buffet enfants</li>
+          <li><i class="fa-solid fa-tv icon-large"></i> Salon TV commun</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-scale-balanced icon-large"></i> Conditions</h3>
+        <ul>
+          <li><i class="fa-solid fa-child icon-large"></i> Enfants bienvenus</li>
+          <li><i class="fa-solid fa-bed icon-large"></i> Lits d’appoint disponibles</li>
+          <li><i class="fa-solid fa-ban icon-large"></i> Pas de lits bébé</li>
+          <li><i class="fa-solid fa-id-badge icon-large"></i> Aucune restriction d’âge</li>
+          <li><i class="fa-solid fa-smoking-ban icon-large"></i> Établissement non-fumeur</li>
+          <li><i class="fa-solid fa-dog icon-large"></i> Animaux : non admis</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-shield-halved icon-large"></i> Sécurité</h3>
+        <ul>
+          <li><i class="fa-solid fa-shield-halved icon-large"></i> Sécurité 24h/24</li>
+          <li><i class="fa-solid fa-camera icon-large"></i> Détecteurs, caméras extérieures</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="appartement-contact">
+      Intéressé par ce bien ? <br>
+      Contactez-nous dès aujourd'hui à <strong>info@tigmino.ma</strong> ou via WhatsApp au <strong>+212 6 74 60 20
+        18</strong> pour plus d'informations ou programmer une visite.
+    </div>
+
+
+    <div class="CONTACTMAP">
+      <!-- Contact Form -->
+      <div class="tigmino-contact">
+        <form id="settings-form" method="POST" action="/Réglages">
+          <h2>Ajouter une demande</h2>
+
+          <label>Nom · Prénom</label>
+          <input type="text" name="name" placeholder="Nom · Prénom" required>
+
+          <label>Téléphone</label>
+          <input type="text" name="phone" placeholder="Téléphone" required>
+
+          <label>Message</label>
+          <textarea name="message" required></textarea>
+
+          {% if not session.username %}
+          <h2>Connectez-vous au TIGMINO</h2>
+          {% else %}
+          <button class="save-btn" type="submit">SAUVEGARDER</button>
+          {% endif %}
+        </form>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3436.1583314662457!2d-9.710965600000002!3d30.544830400000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb24d455ca45321%3A0x306fa366dc620af0!2sHashpoint%20Surfcamp!5e0!3m2!1sfr!2sma!4v1750011254689!5m2!1sfr!2sma"
+          width="500" height="460" style="border:0;" allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+
+  </main>
+
+
+
+  <script src="../../static/Script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

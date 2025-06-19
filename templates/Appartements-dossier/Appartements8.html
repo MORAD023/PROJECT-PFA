@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../../static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+       <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+  <main class="appartement-fiche">
+    <h1 class="appartement-titre">New ! Stunning and Comfortable apartement-Marrakech</h1>
+    <div class="appartement-meta">Appartement à vendre</div>
+    <p class="PRICEMAD"><strong> Prix :</strong> 850 000 MAD</p>
+
+    <div class="appartement-group">
+      <div class="photo-viewer">
+        <img id="mainImage" src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo1.jpg"
+          alt="Image principale">
+        <div class="left-line"></div>
+        <div class="right-line"></div>
+      </div>
+      <div class="appartement-galerie">
+        <div>
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo1.jpg"
+            onclick="switchPhoto(this)">
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo2.jpg"
+            onclick="switchPhoto(this)">
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo3.jpg"
+            onclick="switchPhoto(this)">
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo4.jpg"
+            onclick="switchPhoto(this)">
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo5.jpg"
+            onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo6.jpg"
+            onclick="switchPhoto(this)">
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo7.jpg"
+            onclick="switchPhoto(this)">
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo8.jpg"
+            onclick="switchPhoto(this)">
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo9.jpg"
+            onclick="switchPhoto(this)">
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo10.jpg"
+            onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo11.jpg"
+            onclick="switchPhoto(this)">
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo12.jpg"
+            onclick="switchPhoto(this)">
+        </div>
+      </div>
+    </div>
+    <div class="appartement-description">
+      L’hébergement New! Stunning and Comfortable apartement se trouve à Marrakech dans ce quartier : Guéliz. Il vous
+      accueille à respectivement 1,6 km, 1,3 km et 2,9 km de ces lieux d’intérêt : Gare de Marrakech, Musée Yves Saint
+      Laurent de Marrakech et Place Jemaa el-Fna. Cet hébergement est installé à 1,4 km de : Jardin Majorelle. Vous
+      pourrez profiter d'un parking privé disponible sur place et d'une connexion Wi-Fi gratuite.
+
+      Cet appartement avec climatisation se compose de 1 chambre séparée, d'une cuisine entièrement équipée avec un
+      réfrigérateur et un four, ainsi que de 1 salle de bains. Des serviettes et du linge de lit sont à votre
+      disposition.
+
+      Un service de location de voitures est assuré sur place.
+
+      Vous séjournerez à respectivement 3 km et 3 km de ces lieux d’intérêt : Musée de Mouassine et Mosquée Koutoubia.
+      L’établissement se situe à 4 km de l’aéroport le plus proche (Aéroport Marrakech-Ménara) et propose un service
+      de navette aéroport payant.
+    </div>
+
+    <div class="appartement-details">
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Détails de l'Appartement</h3>
+        <p><i class="fa-solid fa-ruler-combined icon-large"></i> <strong>Surface :</strong> Environ 55–65 m²</p>
+        <p><i class="fa-solid fa-bed icon-large"></i> <strong>Chambres :</strong> 1</p>
+        <p><i class="fa-solid fa-bath icon-large"></i> <strong>Salles de bain :</strong> 1</p>
+        <p><i class="fa-solid fa-umbrella-beach icon-large"></i> <strong>Terrasse / Balcon :</strong> Non spécifié</p>
+        <p><i class="fa-solid fa-eye icon-large"></i> <strong>Vue :</strong> Rue ou cour intérieure</p>
+        <p><i class="fa-solid fa-user-group icon-large"></i> <strong>Capacité :</strong> 2 adultes et 1 enfant</p>
+        <p><i class="fa-solid fa-money-bill-wave icon-large"></i> <strong>Prix :</strong> à partir de 850 000 MAD</p>
+        <p><i class="fa-solid fa-hashtag icon-large"></i> <strong>Référence :</strong> TG1008</p>
+
+        <p><i class="fa-solid fa-location-dot icon-large"></i> <strong>Situation :</strong> Quartier Guéliz — proche de
+          la
+          gare, Jardin Majorelle, Musée YSL et Jemaa el-Fna. Aéroport à 4 km (navette possible).</p>
+
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-door-open icon-large"></i> Agencement</h3>
+        <ul>
+          <li><i class="fa-solid fa-bed icon-large"></i> Chambre : 1 lit double</li>
+          <li><i class="fa-solid fa-couch icon-large"></i> Salon : canapé + coin repas</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-star icon-large"></i> Points forts</h3>
+        <ul>
+          <li><i class="fa-solid fa-wifi icon-large"></i> Wi-Fi gratuit dans tout l’appartement</li>
+          <li><i class="fa-solid fa-temperature-high icon-large"></i> Climatisation et chauffage</li>
+          <li><i class="fa-solid fa-square-parking icon-large"></i> Parking privé gratuit</li>
+          <li><i class="fa-solid fa-elevator icon-large"></i> Ascenseur</li>
+          <li><i class="fa-solid fa-shuttle-van icon-large"></i> Navette aéroport (supplément)</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-screwdriver-wrench icon-large"></i> Équipements</h3>
+        <ul>
+          <li><i class="fa-solid fa-kitchen-set icon-large"></i> Cuisine : plaque, four, frigo, machine à café,
+            ustensiles
+          </li>
+          <li><i class="fa-solid fa-soap icon-large"></i> Lave-linge</li>
+          <li><i class="fa-solid fa-tv icon-large"></i> TV écran plat</li>
+          <li><i class="fa-solid fa-chair icon-large"></i> Coin salon, table à manger, fer à repasser</li>
+          <li><i class="fa-solid fa-shirt icon-large"></i> Étendoir, penderie, sol carrelé/marbre</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Services</h3>
+        <ul>
+          <li><i class="fa-solid fa-car icon-large"></i> Location de voitures</li>
+          <li><i class="fa-solid fa-cart-shopping icon-large"></i> Livraison de courses (supplément)</li>
+          <li><i class="fa-solid fa-shuttle-van icon-large"></i> Navette aéroport (supplément)</li>
+          <li><i class="fa-solid fa-suitcase-rolling icon-large"></i> Bagagerie</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-scale-balanced icon-large"></i> Conditions</h3>
+        <ul>
+          <li><i class="fa-solid fa-child icon-large"></i> Enfants bienvenus</li>
+          <li><i class="fa-solid fa-baby icon-large"></i> Lit bébé sur demande (selon disponibilité)</li>
+          <li><i class="fa-solid fa-ban icon-large"></i> Pas de lit d’appoint</li>
+          <li><i class="fa-solid fa-smoking-ban icon-large"></i> Établissement non-fumeur</li>
+          <li><i class="fa-solid fa-circle-exclamation icon-large"></i> Fêtes & événements interdits</li>
+          <li><i class="fa-solid fa-dog icon-large"></i> Animaux non admis</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-language icon-large"></i> Langues parlées</h3>
+        <ul>
+          <li><i class="fa-solid fa-comment icon-large"></i> Arabe</li>
+          <li><i class="fa-solid fa-comment icon-large"></i> Français</li>
+          <li><i class="fa-solid fa-comment icon-large"></i> Anglais</li>
+        </ul>
+
+      </div>
+    </div>
+
+    <div class="appartement-contact">
+      Intéressé par ce bien ? <br>
+      Contactez-nous dès aujourd'hui à <strong>info@tigmino.ma</strong> ou via WhatsApp au <strong>+212 6 74 60 20
+        18</strong> pour plus d'informations ou programmer une visite.
+    </div>
+
+    <div class="CONTACTMAP">
+      <!-- Contact Form -->
+      <div class="tigmino-contact">
+        <form id="settings-form" method="POST" action="/Réglages">
+          <h2>Ajouter une demande</h2>
+
+          <label>Nom · Prénom</label>
+          <input type="text" name="name" placeholder="Nom · Prénom" required>
+
+          <label>Téléphone</label>
+          <input type="text" name="phone" placeholder="Téléphone" required>
+
+          <label>Message</label>
+          <textarea name="message" required></textarea>
+
+          {% if not session.username %}
+          <h2>Connectez-vous au TIGMINO</h2>
+          {% else %}
+          <button class="save-btn" type="submit">SAUVEGARDER</button>
+          {% endif %}
+        </form>
+      </div>
+
+      <!-- Map -->
+
+
+    </div>
+    </div>
+
+  </main>
+
+
+
+  <script src="../../static/Script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

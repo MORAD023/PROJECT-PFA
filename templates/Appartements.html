@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+       <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+    <h2 class="search-title">Appartements Confortables et Équipés</h2>
+
+    <div class="cards">
+      <div class="card">
+
+        <a href="/Appartements01" class="card">
+          <img src="/static/Appartements1-images/Agadir-photo1.jpg" alt="Marina Apartment Agadir">
+        </a>
+        <div class="card-content">
+          <h2>Marina Apartment Agadir</h2>
+          <p>🌍 اقامة مارينا, Agadir 80000</p>
+          <p>2 ch., sdb, salon, cuisine, piscines, jardin. Près plage & Marina.</p>
+
+
+
+          <p class="PRICEMAD"><strong> Prix : 1 450 000 MAD </strong></p>
+
+        </div>
+      </div>
+      <div class="card">
+        <a href="/Appartements02" class="card">
+          <img src="/static/Appartements2-images/Zephyr-Agadir-Photo1.jpg" alt="Zephyr Agadir">
+        </a>
+        <div class="card-content">
+          <h2>Zephyr Agadir</h2>
+          <p>🌍 Delice Pizza Bay, Agadir 80010</p>
+          <p>Zephyr – Founty : clim, Wi‑Fi, TV, sdb, terrasse (selon logement), piscine, parking. 1,7 km de la plage.
+          </p>
+
+
+          <p class="PRICEMAD"><strong> Prix : 980 000 MAD </strong></p>
+
+        </div>
+      </div>
+      <div class="card">
+        <a href="/Appartements03" class="card">
+          <img src="/static/Appartements3-images/ISLAN bay-photo1.jpg" alt="ISLAN bay apartment Agadir">
+        </a>
+        <div class="card-content">
+          <h2>ISLAN bay apartment Agadir</h2>
+          <p>🌍 CCPP+8Q8 Hay Mohammedi, Agadir 80000</p>
+          <p>ISLAN Bay : 1 ch., salon, clim, Wi‑Fi, TV, piscine privée, balcon, parking.</p>
+
+
+          <p class="PRICEMAD"><strong> Prix : 720 000 MAD </strong></p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="cards">
+      <div class="card">
+        <a href="/Appartements04" class="card">
+          <img src="/static/Appartements4-images/Luxurious Sea-View 2Br-photo1.jpg"
+            alt="Luxurious Sea-View 2Br Apartment Agadir">
+        </a>
+        <div class="card-content">
+          <h2>Luxurious Sea-View 2Br Apartment Agadir</h2>
+          <p>🌍 LOT 25 K, Avenue Lahoucine Achengli, Agadir 80015</p>
+          <p>Luxueux – 2 ch., cuisine, clim, Wi‑Fi, TV, terrasse vue mer. Piscine, jardin, parking.</p>
+
+
+          <p class="PRICEMAD"><strong> Prix : 1 450 000 MAD </strong></p>
+        </div>
+      </div>
+      <div class="card">
+        <a href="/Appartements05" class="card">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo1.jpg" alt="Tamourrit Appartement Taghazout">
+        </a>
+        <div class="card-content">
+          <h2>Tamourrit Apartment Taghazout</h2>
+          <p>🌍 Apartment 101 bloc, Taghazout 80000</p>
+          <p>Taghazout : 1 ch., 2 sdb, cuisine, balcon vue mer, plage directe, piscine, clim, Wi‑Fi, parking.</p>
+
+
+          <p class="PRICEMAD"><strong> Prix : 1 200 000 MAD </strong></p>
+        </div>
+      </div>
+      <div class="card">
+        <a href="/Appartements06" class="card">
+          <img src="/static/Appartements6-images/Bouad Seafront-photo1.jpg" alt="Bouad Seafront apartment Taghazout">
+        </a>
+        <div class="card-content">
+          <h2>Bouad Seafront apartment Taghazout</h2>
+          <p>🌍 Rue Tayoughte 107, Taghazout 80022</p>
+          <p>Taghazout (19 km d’Agadir) : appart. bord de mer, cuisine, sdb, barbecue, location voiture.</p>
+
+          <p class="PRICEMAD"><strong> Prix : 750 000 MAD </strong></p>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="cards">
+      <div class="card">
+        <a href="/Appartements07" class="card">
+          <img src="/static/Appartements7-images/Heavenly apartment-Photo1.jpg" alt="Heavenly apartment Essaouira">
+        </a>
+        <div class="card-content">
+          <h2>Heavenly apartment Essaouira</h2>
+          <p>🌍 F6WQ+5G5, Rue Sidi Magdoul, Essaouira</p>
+          <p>Essaouira : 2 ch., salon, cuisine, douche, Wi‑Fi, clim, terrasse, balcon vue mer/ville. 700 m plage.</p>
+
+
+          <p class="PRICEMAD"><strong> Prix : 950 000 MAD </strong></p>
+        </div>
+      </div>
+      <div class="card">
+        <a href="/Appartements08" class="card">
+          <img src="/static/Appartements8-images/New ! Stunning and Comfortable apartement-photo1.jpg"
+            alt="New Stunning and Comfortable apartement Marrakech">
+        </a>
+        <div class="card-content">
+          <h2>New! Stunning and Comfortable apartement Marrakech</h2>
+          <p>🌍 JXMR+QR9, Rue el Imam Malik, Marrakech 40000, Maroc</p>
+          <p>Situé à Guéliz, Marrakech. 1 chambre, cuisine équipée, salle de bains, climatisation,
+            Wi-Fi, parking privé.</p>
+
+          <p class="PRICEMAD"><strong> Prix : 850 000 MAD </strong></p>
+        </div>
+      </div>
+      <div class="card">
+        <a href="/Appartements09" class="card">
+          <img src="/static/Appartements9-images/TheCasaEdition Gauthier Residency City Center-photo1.jpg"
+            alt="TheCasaEdition Gauthier Residency City Center Casablanca">
+        </a>
+        <div class="card-content">
+          <h2>TheCasaEdition Gauthier Residency City Center Casablanca</h2>
+          <p>🌍 12 Rue Bachir Al Brahimi, Casablanca 20250</p>
+          <p>Casablanca – TheCasaEdition Gauthier : clim, balcon, cuisine, Wi‑Fi, terrasse, sdb.</p>
+
+          </p>
+          <p class="PRICEMAD"><strong> Prix : 1 300 000 MAD </strong></p>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+    <div class="cards">
+      <div class="card">
+        <a href="/Appartements010" class="card">
+          <img src="/static/Appartements10-images/Rabat Agdal Pearl-photo1.jpg" alt="Rabat Agdal Pearl">
+        </a>
+        <div class="card-content">
+          <h2>Rabat Agdal Pearl</h2>
+          <p>🌍 243Q+J4H, Av. Al Houria, Rabat</p>
+          <p>Rabat Agdal Pearl : 2 ch., clim, Wi‑Fi, terrasse, parking. À 700 m du Ministry of Higher Education.</p>
+
+          <p class="PRICEMAD"><strong> Prix : 1 300 000 MAD </strong></p>
+        </div>
+      </div>
+      <div class="card">
+        <a href="/Appartements011" class="card">
+          <img src="/static/Appartements11-images/Alma Prestigia Appartment-photo1.jpg"
+            alt="Alma Prestigia Appartment Marrakech">
+        </a>
+        <div class="card-content">
+          <h2>Alma Prestigia Appartment Marrakech</h2>
+          <p>🌍 prestigia Corail, 40000 Marrakech, Maroc</p>
+          <p>Alma Prestigia, Marrakech : Wi‑Fi, piscine, clim, cuisine, restaurant.</p>
+
+          <p class="PRICEMAD"><strong> Prix : 1 200 000 MAD </strong></p>
+        </div>
+      </div>
+      <div class="card">
+        <a href="/Appartements012" class="card">
+          <img src="/static/Appartements12-images/Mogador apartment-photo1.jpg"
+            alt="Sea view Mogador apartment Essaouira">
+        </a>
+        <div class="card-content">
+          <h2>Sea view Mogador apartment Essaouira</h2>
+          <p>🌍 F6XP+VXG hôtel atlas, Essaouira collé à l, Essaouira</p>
+          <p>Essaouira Mogador : 1 ch., piscine, jardin, Wi‑Fi, parking, cuisine, 2 sdb, linge fourni.</p>
+
+
+          <p class="PRICEMAD"><strong> Prix : 1 050 000 MAD </strong></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="../static/script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>
+
+</html>

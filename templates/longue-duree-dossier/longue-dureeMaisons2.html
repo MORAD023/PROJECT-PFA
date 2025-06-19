@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../../static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+      <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+  <main class="appartement-fiche">
+    <h1 class="appartement-titre">Diamond House-Casablanca</h1>
+    <div class="appartement-meta">Location de Maison pour 5 adultes et 4 enfants</div>
+    <p class="PRICEMAD"><strong> Prix : 12 942 MAD / moins </strong></p>
+    <!-- Main image -->
+    <div class="appartement-group">
+      <div class="photo-viewer">
+        <img id="mainImage" src="/static/longue-dureeMaisons2/Diamond House-photo1.jpg" alt="Image principale">
+
+        <div class="left-line"></div>
+        <div class="right-line"></div>
+      </div>
+
+      <!-- Thumbnail gallery -->
+      <div class="appartement-galerie">
+        <div>
+          <img src="/static/longue-dureeMaisons2/Diamond House-photo1.jpg" onclick="switchPhoto(this)">
+          <img src="/static/longue-dureeMaisons2/Diamond House-photo2.jpg" onclick="switchPhoto(this)">
+          <img src="/static/longue-dureeMaisons2/Diamond House-photo3.jpg" onclick="switchPhoto(this)">
+          <img src="/static/longue-dureeMaisons2/Diamond House-photo4.jpg" onclick="switchPhoto(this)">
+          <img src="/static/longue-dureeMaisons2/Diamond House-photo5.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/longue-dureeMaisons2/Diamond House-photo6.jpg" onclick="switchPhoto(this)">
+          <img src="/static/longue-dureeMaisons2/Diamond House-photo7.jpg" onclick="switchPhoto(this)">
+          <img src="/static/longue-dureeMaisons2/Diamond House-photo8.jpg" onclick="switchPhoto(this)">
+          <img src="/static/longue-dureeMaisons2/Diamond House-photo9.jpg" onclick="switchPhoto(this)">
+          <img src="/static/longue-dureeMaisons2/Diamond House-photo10.jpg" onclick="switchPhoto(this)">
+        </div>
+      </div>
+    </div>
+    <div class="appartement-description">
+      L’hébergement Diamond House vous accueille à Casablanca et comprend un bain à remous. Cet hébergement met à votre
+      disposition un balcon, un parking privé gratuit et une connexion Wi-Fi gratuite.
+
+      Cet appartement possède une terrasse, 1 chambre, un salon et une cuisine bien équipée. Une télévision à écran plat
+      est à votre disposition.
+
+      Vous séjournerez à respectivement 4,6 km et 7,2 km de ces lieux d’intérêt : Anfa Place Living Resort et Centre
+      commercial Morocco Mall. L'aéroport le plus proche (Aéroport Mohammed V de Casablanca) est à 25 km.
+    </div>
+    <div class="appartement-details">
+ <!-- Détails de l'Appartement -->
+<div>
+    <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Détails de l'Appartement</h3>
+    <p><i class="fa-solid fa-bed icon-large"></i> <strong>Literie :</strong><br>
+        • Chambre 1 : 2 lits simples et 1 lit double<br>
+        • Salon : 6 canapés-lits
+    </p>
+    <p><i class="fa-solid fa-bath icon-large"></i> <strong>Salles de bains :</strong> 2</p>
+    <p><i class="fa-solid fa-people-group icon-large"></i> <strong>Idéal pour :</strong> Séjour confortable</p>
+    <p><i class="fa-solid fa-wifi icon-large"></i> <strong>Connexion Wi-Fi :</strong> Gratuite dans tout l’établissement</p>
+    <p><i class="fa-solid fa-kitchen-set icon-large"></i> <strong>Cuisine :</strong> Oui</p>
+    <p><i class="fa-solid fa-washer icon-large"></i> <strong>Lave-linge :</strong> Oui</p>
+    <p><i class="fa-solid fa-tv icon-large"></i> <strong>Télévision :</strong> Écran plat</p>
+    <p><i class="fa-solid fa-square-parking icon-large"></i> <strong>Parking :</strong> Gratuit, privé, sans réservation préalable</p>
+    <p><i class="fa-solid fa-balcony icon-large"></i> <strong>Balcon :</strong> Oui</p>
+    <p><i class="fa-solid fa-house icon-large"></i> <strong>Terrasse :</strong> Oui</p>
+    <p><i class="fa-solid fa-hot-tub-person icon-large"></i> <strong>Bain à remous :</strong> Oui</p>
+    <p><i class="fa-solid fa-paw icon-large"></i> <strong>Animaux domestiques :</strong> Admis sans supplément</p>
+    <p><i class="fa-solid fa-smoking-ban icon-large"></i> <strong>Établissement :</strong> Entièrement non-fumeurs</p>
+</div>
+
+<div>
+    <h3><i class="fa-solid fa-language icon-large"></i> Langues parlées</h3>
+    <ul>
+        <li>Arabe</li>
+        <li>Français</li>
+    </ul>
+</div>
+
+<div>
+    <h3><i class="fa-solid fa-baby icon-large"></i> Enfants et lits</h3>
+    <ul>
+        <li>Tous les enfants sont les bienvenus</li>
+        <li>Aucun lit bébé ou lit d’appoint disponible</li>
+        <li>Aucune restriction d'âge pour l'enregistrement</li>
+    </ul>
+</div>
+
+<div>
+    <h3><i class="fa-solid fa-ban-smoking icon-large"></i> Règles de l’établissement</h3>
+    <ul>
+        <li>Non-fumeurs</li>
+        <li>Pas de fêtes ni d’événements autorisés</li>
+        <li>Animaux domestiques admis sans supplément</li>
+    </ul>
+</div>
+
+    </div>
+
+
+    <div class="appartement-contact">
+      Intéressé par ce bien ? <br>
+      Contactez-nous dès aujourd'hui à <strong>info@tigmino.ma</strong> ou via WhatsApp au <strong>+212 6 74 60 20
+        18</strong> pour plus d'informations ou programmer une visite.
+    </div>
+
+
+
+
+
+    <div class="CONTACTMAP">
+      <!-- Contact Form -->
+      <div class="tigmino-contact">
+        <form id="settings-form" method="POST" action="/Réglages">
+          <h2>Ajouter une demande</h2>
+
+          <label>Nom · Prénom</label>
+          <input type="text" name="name" placeholder="Nom · Prénom" required>
+
+          <label>Téléphone</label>
+          <input type="text" name="phone" placeholder="Téléphone" required>
+
+          <label>Message</label>
+          <textarea name="message" required></textarea>
+
+          {% if not session.username %}
+          <h2>Connectez-vous au TIGMINO</h2>
+          {% else %}
+          <button class="save-btn" type="submit">SAUVEGARDER</button>
+          {% endif %}
+        </form>
+      </div>
+
+      
+    </div>
+
+
+
+  </main>
+
+
+
+  <script src="../../static/Script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

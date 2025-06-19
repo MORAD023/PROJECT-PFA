@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+      <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <!-- Form -->
+  <h2 class="search-title">Trouvez une Location Journalière Confortable et Flexible</h2>
+  <div class="search-bar">
+    <form method="get" action="/locations/journaliere"  onsubmit="return validateDates()">
+
+      <select name="ville" required>
+        <option value="">Choisissez la Ville</option>
+        <option>Agadir</option>
+        <option>Rabat</option>
+        <option>Taghazout</option>
+      </select>
+
+      <select name="adultes" required>
+        <option value="">Adultes</option>
+        <option value="1">1 Adulte</option>
+        <option value="2">2 Adultes</option>
+        <option value="3">3 Adultes</option>
+        <option value="4">4 Adultes</option>
+        <option value="5">5 Adultes</option>
+        <option value="6">6 Adultes</option>
+      </select>
+
+      <select name="enfants" required>
+        <option value="">Enfants</option>
+        <option value="0">0 Enfant</option>
+        <option value="1">1 Enfant</option>
+        <option value="2">2 Enfants</option>
+        <option value="3">3 Enfants</option>
+        <option value="4">4 Enfants</option>
+      </select>
+
+  <input type="date" id="date_depart" name="date_depart" class="date-input" required min="{{ today }}" value="{{ date_depart }}">
+  
+  <input type="date" id="date_retour" name="date_retour" class="date-input" required min="{{ today }}" value="{{ date_retour }}">
+
+
+      <button type="submit" style="background-color: rgb(143, 7, 206);">Rechercher</button>
+    </form>
+  </div>
+
+  <!-- Résultats -->
+  {% if ville and (adultes or enfants or date_depart or date_retour) %}
+  {% if cards %}
+  <div class="results">
+    {% for card in cards %}
+    <div class="card">
+      <a href="{{ card.url }}" class="card">
+        <img src="{{ card.img }}" alt="{{ card.alt }}">
+      </a>
+      <div class="card-content">
+        <h2>{{ card.title }}</h2>
+        <p>{{ card.localisation }}</p>
+        <p>{{ card.description }}</p>
+        <p>Pour {{ card.max_adultes }} adulte{{ 's' if card.max_adultes > 1 else '' }} et {{ card.max_enfants }}
+          enfant{{ 's' if card.max_enfants > 1 else '' }}</p>
+        <p class="PRICEMAD"><strong>Prix :</strong> {{ card.prix }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="search-title">Aucun résultat trouvé pour votre recherche.</p>
+  {% endif %}
+  {% endif %}
+
+
+
+
+
+
+
+
+  <section class="section">
+    <div class="filters">
+      <button class="filter-btn">Appartements</button>
+      <button class="filter-btn">Maisons</button>
+      <button class="filter-btn">Villas</button>
+    </div>
+  </section>
+
+  <div class="cards">
+    <div class="card">
+      <a href="/JournaliereAppartements1" class="card">
+        <img src="/static/JournaliereAppartements1/Atlantic Palm Beach-photo1.jpg" alt="Atlantic Palm Beach">
+      </a>
+      <div class="card-content">
+        <h2>Atlantic Palm Beach-Agadir</h2>
+        <p>🌍 City Founty A1 Secteur A Zone Touristique, Agadir 80000c</p>
+        <p>Appart. avec clim, Wi-Fi gratuit, piscine, vue mer/piscine. Resto, services, près aéroport (19 km).</p>
+        <p>pour 2 adultes et 4 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 18 957 MAD / jours </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/JournaliereMaisons1" class="card">
+        <img src="/static/JournaliereMaisons1/Panorama Guesthouse-photo1.jpg" alt="Panorama Guesthouse">
+      </a>
+      <div class="card-content">
+        <h2>Panorama Guesthouse-Agadir</h2>
+        <p>🌍 CR AOURIR, DR OUBAHA TAMRAGHTE, Agadir 80000</p>
+        <p>Chambres avec balcon vue mer, jardin, terrasse, cuisine partagée, Wi-Fi. Piscine int., loc. vélos/voitures,
+          navette aéroport (36 km).</p>
+        <p>pour 2 adultes et 4 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 33 701 MAD / jours </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/JournaliereVillas1" class="card">
+        <img src="/static/JournaliereVillas1/Villa de Luxe - Agadir City-photo1.jpg" alt="Villa de Luxe - Agadir City">
+      </a>
+      <div class="card-content">
+        <h2>Villa de Luxe - Agadir City</h2>
+        <p>🌍 Agadir, Maroc</p>
+        <p>Villa 4 ch. à Agadir avec piscine privée, jardin, terrasse vue ville/montagne. Cuisine équipée, 3 sdb. Sauna,
+          hammam, parking gratuit. À 6 km de la Marina, 20 km aéroport.</p>
+        <p>pour 3 adultes et 4 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 58 528 MAD / jours </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/JournaliereAppartements2" class="card">
+        <img src="/static/JournaliereAppartements2/AFRICA SURF HOUSE-photo1.jpg" alt="AFRICA SURF HOUSE-Taghzout">
+      </a>
+      <div class="card-content">
+        <h2>AFRICA SURF HOUSE-Taghzout</h2>
+        <p>🌍 G7WQ+2FP, Taghazout</p>
+        <p>Appart. avec Wi-Fi gratuit, plage privée, 3 ch., cuisine, terrasse. Proche Plage Taghazout (500 m), Golf
+          (4,4 km), parc aquatique (8,1 km), port & marina Agadir (18–19 km), aéroport (40 km).</p>
+        <p>pour 5 adultes et 2 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 12 132 MAD / jours </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/JournaliereMaisons2" class="card">
+        <img src="/static/JournaliereMaisons2/Atlas Hostel Taghazout-photo1.jpg" alt="Atlas Hostel Taghazout">
+      </a>
+      <div class="card-content">
+        <h2>Atlas Hostel Taghazout</h2>
+        <p>🌍 G7WQ+3Q6, Rue Iwlit, Taghazout 80000</p>
+        <p>Auberge avec terrasse, cuisine partagée, salon commun, Wi-Fi gratuit. Proche plage (400 m), golf (4,4 km),
+          marina (19 km). Randonnée, bagagerie, navette aéroport (40 km).</p>
+        <p>pour 6 adultes et 3 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 16 366 MAD / jours </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/JournaliereVillas2" class="card">
+        <img src="/static/JournaliereVillas2/Villa Belle Vue-photo1.jpg" alt="Villa Belle Vue Taghazout">
+      </a>
+      <div class="card-content">
+        <h2>Villa Belle Vue-Taghazout</h2>
+        <p>🌍 G7WR+4C, Taghazout</p>
+        <p>Villa 6 ch. à Taghazout avec piscine privée, jardin, terrasse. Clim., cuisine équipée, 6 sdb, Wi-Fi, TV. À
+          200 m de la plage, 5 km du golf, 20 km port d’Agadir, 42 km aéroport.</p>
+        <p>pour 6 adultes et 4 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 65 716 MAD / jours </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/JournaliereAppartements3" class="card">
+        <img src="/static/JournaliereAppartements3/The lodge Residence by Goodmove-photo1.jpg"
+          alt="The lodge Residence by Goodmove-Rabat">
+      </a>
+      <div class="card-content">
+        <h2>The lodge Residence by Goodmove-Rabat</h2>
+        <p>🌍 6ème étage, Riad Andalous seville n°85, Rabat 10100</p>
+        <p>Appart. climatisé avec Wi-Fi gratuit, cuisine équipée, terrasse, parking privé. À 5,1 km du Golf royal,
+          10–11 km de la Bibliothèque nationale et Tour Hassan, 17 km de l’aéroport.</p>
+        <p>pour 5 adultes et 1 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 29 572 MAD / jours </strong></p>
+
+      </div>
+    </div>
+    <div class="card">
+      <a href="/JournaliereMaisons3" class="card">
+        <img src="/static/JournaliereMaisons3/Riad Dar El Mesk-photo1.jpg" alt="Riad Dar El Mesk-Rabat">
+      </a>
+      <div class="card-content">
+        <h2>Riad Dar El Mesk-Rabat</h2>
+        <p>🌍 n17 Impasse El Kalkhe, Av. Mohammed V, Rabat 10030</p>
+        <p>Maison d’hôtes avec terrasse, patio, salon commun, Wi-Fi gratuit. À 700 m de la plage, proche Tour Hassan,
+          Kasbah des Oudayas. À 2,2 km de la Bibliothèque nationale, 3,9 km de la Marina. Navette aéroport (10 km).</p>
+        <p>pour 4 adultes et 4 enfants</p>
+
+
+        <p class="PRICEMAD"><strong> Prix : 13 801 MAD / jours </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/JournaliereVillas3" class="card">
+        <img src="/static/JournaliereVillas3/Villa élégante-photo1.jpg" alt="Villa élégante-Rabat">
+      </a>
+      <div class="card-content">
+        <h2>Villa élégante-Rabat</h2>
+        <p>🌍 12040, 249 R322, Temara</p>
+        <p>Villa 4 ch. à Harhoura avec jardin, plage privée, terrasse. Clim., cuisine équipée, 4 sdb, Wi-Fi, TV. À
+          2,3 km de la plage la Falaise, 12 km du golf, 14 km bibliothèque, 24 km aéroport.</p>
+        <p>pour 4 adultes et 4 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 28 094 MAD / jours </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  <script src="../static/script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

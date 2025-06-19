@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+      <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+  <h2 class="search-title">Maisons Confortables et Équipés</h2>
+
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/Maisons1" class="card">
+        <img src="/static/Maisons1-images/L'Orientale By La Siredrah-photo1.jpg"
+          alt="L'Orientale By La Siredrah-Marrakech">
+      </a>
+      <div class="card-content">
+        <h2>L'Orientale By La Siredrah-Marrakech</h2>
+        <p>🌍 km 7, Route d'Amizmiz, Marrakech 40000</p>
+        <p>Maison d’hôte à Marrakech : chambres clim., Wi‑Fi, TV, piscine, jardin, resto, bar, navette aéroport,
+          réception 24h.</p>
+        <p class="PRICEMAD"><strong> Prix : 1 350 000 MAD </strong></p>
+
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Maisons2" class="card">
+        <img src="/static/Maisons2-images/Yanis Guest House-Photo1.jpg" alt="Yanis Guest House-Marrakech">
+      </a>
+      <div class="card-content">
+        <h2>Yanis Guest House-Marrakech</h2>
+        <p>🌍 DR SOUDANI, 540 Rte de Targa, Marrakech 40000</p>
+        <p>Maison d’hôte à Rabat (800 m plage) : chambres clim., patio, cuisine équipée, Wi‑Fi, terrasse, navette
+          aéroport, réception 24h.</p>
+        <p class="PRICEMAD"><strong> Prix : 1 250 000 MAD </strong></p>
+
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Maisons3" class="card">
+        <img src="/static/Maisons3-images/RIAD LALLA ZINEB-Photo1.jpg" alt="RIAD LALLA ZINEB-Rabat">
+      </a>
+      <div class="card-content">
+        <h2>RIAD LALLA ZINEB-Rabat</h2>
+        <p>🌍 6 Rue el Kobba, Rabat</p>
+        <p>Maison d’hôte : 3 chambres SDB, clim., Wi‑Fi, 2 piscines ext., resto, parking, navette aéroport.</p>
+
+        <p class="PRICEMAD"><strong> Prix : 2 700 000 MAD </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/Maisons4" class="card">
+        <img src="/static/Maisons4-images/Pearl Surf Camp Morocco-Photo1.jpg" alt="Pearl Surf Camp Morocco-Agadir">
+      </a>
+      <div class="card-content">
+        <h2>Pearl Surf Camp Morocco-Agadir</h2>
+        <p>🌍 Km 26 route d'Essaouira, Imi Ouaddar, Agadir 80000</p>
+        <p>Maison d’hôte à Agadir, à 400 m de la plage. Chambres avec Wi‑Fi, jardin, terrasse, parking gratuit. Proche
+          Atlantica Parc, Golf Tazegzout et port. Petit-déjeuner inclus.</p>
+
+        <p class="PRICEMAD"><strong> Prix : 1 330 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Maisons5" class="card">
+        <img src="/static/Maisons5-images/Single fin taghazout surf & stay-Photo1.jpg"
+          alt="Single fin taghazout surf & stay">
+      </a>
+      <div class="card-content">
+        <h2>Single fin taghazout surf & stay</h2>
+        <p>🌍 Taghazout centre N 43 Taghazout, Agadir 80022</p>
+        <p>Auberge surf & détente à Taghazout, chambres avec vue montagne, piscine intérieure, terrasse et cuisine
+          commune.</p>
+
+        <p class="PRICEMAD"><strong> Prix : 2 500 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Maisons6" class="card">
+        <img src="/static/Maisons6-images/Riad Dar Sarah-photo1.jpg" alt="Riad Dar Sarah">
+      </a>
+      <div class="card-content">
+        <h2>Riad Dar Sarah-Taghazout</h2>
+        <p>🌍 Center, Ait Bihi, Taghazout 80022</p>
+        <p>Riad de charme à Taghazout avec chambres vue montagne, piscine intérieure, terrasse, jardin et restaurant
+          marocain.</p>
+        <p class="PRICEMAD"><strong> Prix : 1 330 000 MAD </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/Maisons7" class="card">
+        <img src="/static/Maisons7-images/Dar Tahra-photo1.jpg" alt="Dar Tahra">
+      </a>
+      <div class="card-content">
+        <h2>Dar Tahra-Casablanca</h2>
+        <p>🌍 Ang, Bd Panoramique, Rte Ouled Said, Casablanca 20100</p>
+        <p>Maison d’hôtes de charme à 15 min du centre de Casablanca, avec jardin, piscine extérieure, hammam et
+          salons marocains. Chambres climatisées avec vue, Wi-Fi gratuit et petit-déjeuner inclus.</p>
+        <p class="PRICEMAD"><strong> Prix : 1 270 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Maisons8" class="card">
+        <img src="/static/Maisons8-images/LHOSTEL à Casablanca-photo1.jpg" alt="LHOSTEL à Casablanca">
+      </a>
+      <div class="card-content">
+        <h2>LHOSTEL à Casablanca</h2>
+        <p>🌍 6 Rue d'Aix, Casablanca 20410</p>
+        <p>Auberge conviviale à Casablanca avec jardin, terrasse, cuisine commune et Wi-Fi gratuit. Petit-déjeuner
+          buffet, parking privé, proche centre-ville et transports.</p>
+        <p class="PRICEMAD"><strong> Prix : 580 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Maisons9" class="card">
+        <img src="/static/Maisons9-images/Auberge Les Montagnes du Paradis-photo1.jpg"
+          alt="Auberge Les Montagnes du Paradis-Agadir">
+      </a>
+      <div class="card-content">
+        <h2>Auberge Les Montagnes du Paradis-Agadir</h2>
+        <p>🌍 40 km d'agadir، Route d'imouzzer, Agadir 80300</p>
+        <p>Auberge chaleureuse à Agadir, nichée dans la Vallée du Paradis, avec piscine extérieure, jardin, terrasse
+          et Wi-Fi gratuit. Chambres avec vue montagne ou piscine, restaurant marocain et européen.</p>
+        <p class="PRICEMAD"><strong> Prix : 850 000 MAD </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/Maisons10" class="card">
+        <img src="/static/Maisons10-images/Riad Dar Rabiaa-photo1.jpg" alt="Riad Dar Rabiaa-Rabat">
+      </a>
+      <div class="card-content">
+        <h2>Riad Dar Rabiaa-Rabat</h2>
+        <p>🌍 7 Rue Hotel Chorfas, Rabat 10000</p>
+        <p>Riad authentique au cœur de Rabat, proche de la plage, de la Kasbah des Oudayas et de la Tour Hassan.
+          Piscine intérieure, terrasse, bar, Wi-Fi gratuit et chambres climatisées.</p>
+        </p>
+        <p class="PRICEMAD"><strong> Prix : 1 150 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Maisons11" class="card">
+        <img src="/static/Maisons11-images/Riad Dar Awil-photo1.jpg" alt="Riad Dar Awil-Essaouira">
+      </a>
+      <div class="card-content">
+        <h2>Riad Dar Awil-Essaouira</h2>
+        <p>🌍 58 Rue d'Agadir, Essaouira 44000</p>
+        <p>Riad Dar Awil à Essaouira, avec salon commun, terrasse, restaurant, réception 24h/24, transferts aéroport,
+          et vue sur la ville.</p>
+        <p class="PRICEMAD"><strong> Prix : 935 000 MAD </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/Maisons12" class="card">
+        <img src="/static/Maisons12-images/RIAD MAROSKO-photo1.jpg" alt="RIAD MAROSKO Essaouira">
+      </a>
+      <div class="card-content">
+        <h2>RIAD MAROSKO-Essaouira</h2>
+        <p>🌍 66 Rue d'Agadir, Essaouira 44000</p>
+        <p>Maison d’hôtes à Essaouira, quartier Ahl Agadir, avec patio, terrasse, Wi-Fi gratuit et petit-déjeuner
+          servi sur place. À 700 m de la plage et 6 km du Golf de Mogador.</p>
+        <p class="PRICEMAD"><strong> Prix : 968 000 MAD </strong></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../static/script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

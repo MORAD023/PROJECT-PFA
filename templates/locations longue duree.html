@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+      <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- Form -->
+  <h2 class="search-title">Trouvez une Location Longue Durée Adaptée à Vos Besoins</h2>
+
+<div class="search-bar">
+  <form method="get" action="/locations/longue-duree"  onsubmit="return validateMonthlyDates()">
+    <select name="ville" required>
+      <option value="">Choisissez la Ville</option>
+      <option value="Marrakech" {{ 'selected' if ville == 'Marrakech' else '' }}>Marrakech</option>
+      <option value="Essaouira" {{ 'selected' if ville == 'Essaouira' else '' }}>Essaouira</option>
+      <option value="Casablanca" {{ 'selected' if ville == 'Casablanca' else '' }}>Casablanca</option>
+    </select>
+
+    <select name="adultes" required>
+      <option value="">Adultes</option>
+      {% for i in range(1, 7) %}
+        <option value="{{ i }}" {{ 'selected' if adultes == i else '' }}>{{ i }} Adulte{{ 's' if i > 1 else '' }}</option>
+      {% endfor %}
+    </select>
+
+    <select name="enfants" required>
+      <option value="">Enfants</option>
+      {% for i in range(5) %}
+        <option value="{{ i }}" {{ 'selected' if enfants == i else '' }}>{{ i }} Enfant{{ 's' if i > 1 else '' }}</option>
+      {% endfor %}
+    </select>
+
+    <input type="date" id="date_depart2" name="date_depart" class="date-input" required min="{{ today }}" value="{{ date_depart }}">
+  
+  <input type="date" id="date_retour2" name="date_retour" class="date-input" required min="{{ today }}" value="{{ date_retour }}">
+
+    <button type="submit" style="background-color: rgb(143, 7, 206);">Rechercher</button>
+  </form>
+</div>
+
+  <!-- Résultats -->
+  {% if ville and (adultes or enfants or date_depart or date_retour) %}
+  {% if cards %}
+  <div class="results">
+    {% for card in cards %}
+    <div class="card">
+      <a href="{{ card.url }}" class="card">
+        <img src="{{ card.img }}" alt="{{ card.alt }}">
+      </a>
+      <div class="card-content">
+        <h2>{{ card.title }}</h2>
+        <p>{{ card.localisation }}</p>
+        <p>{{ card.description }}</p>
+        <p>Pour {{ card.max_adultes }} adulte{{ 's' if card.max_adultes > 1 else '' }} et {{ card.max_enfants }}
+          enfant{{ 's' if card.max_enfants > 1 else '' }}</p>
+        <p class="PRICEMAD"><strong>Prix :</strong> {{ card.prix }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="search-title">Aucun résultat trouvé pour votre recherche.</p>
+  {% endif %}
+  {% endif %}
+
+
+
+    <section class="section">
+    <div class="filters">
+      <button class="filter-btn">Appartements</button>
+      <button class="filter-btn">Maisons</button>
+      <button class="filter-btn">Villas</button>
+    </div>
+  </section>
+  <div class="cards">
+    <div class="card">
+      <a href="/longuedureeAppartements1" class="card">
+        <img src="/static/longue-dureeAppartements1/appartement 2 chambre proche Medina-photo1.jpg"
+          alt="Appartement 2 chambre proche Medina">
+      </a>
+      <div class="card-content">
+        <h2>Appartement 2 chambre proche Medina-Marrakech</h2>
+        <p>🌍 Mabrouka hiba M2 APT 1 RDC MARRAKECH, 40000</p>
+        <p>Appart. 2 ch. avec clim, Wi-Fi gratuit, balcon, terrasse, parking. À 4–7 km de musées, gare, Médina. Aéroport
+          à 7 km.</p>
+        <p>pour 4 adultes et 2 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 17 370 MAD / moins </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/longuedureeMaisons1" class="card">
+        <img src="/static/longue-dureeMaisons1/Riad Malayine-photo1.jpg" alt="Riad Malayine">
+      </a>
+      <div class="card-content">
+        <h2>Riad Malayine-Marrakech</h2>
+        <p>🌍 53 Av. Imam El Ghazali, Marrakech 40000</p>
+        <p>Riad Malayine en centre-ville de Marrakech, propose chambres climatisées, Wi-Fi, salon commun,
+          terrasse, restaurant, service d’étage et excursions. Proche musées, mosquée Koutoubia et Place Jemaa el-Fna.
+          Navette aéroport payante (6 km).</p>
+
+        <p>pour 5 adultes et 3 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 350 090 MAD / moins </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/longuedureeVillas1" class="card">
+        <img src="/static/longue-dureeVillas1/Villa Marrakech-photo1.jpg" alt="Villa Marrakech">
+      </a>
+      <div class="card-content">
+        <h2>Villa Marrakech</h2>
+        <p>🌍 MXHR+JWG, Residence Talmoulkt, Oued Laabid, Casablanca Rd, Marrakesh 40000</p>
+        <p>Villa haut standing à Marrakech avec piscine extérieure, salon commun, terrasse vue montagne. Cuisine
+          entièrement équipée, climatisation, Wi-Fi. À 5 km du Musée Yves Saint Laurent, 5,3 km du Jardin
+          Majorelle, 6,5 km de la gare, 9 km de l’aéroport Marrakech-Ménara.</p>
+
+        <p>pour 6 adultes et 4 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 83 409 MAD / moins </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/longuedureeAppartements2" class="card">
+        <img src="/static/longue-dureeAppartements2/Ourlfa apartment-photo1.jpg" alt="Ourlfa apartment">
+      </a>
+      <div class="card-content">
+        <h2>Ourlfa apartment-Casablanca</h2>
+        <p>🌍 Oulfa, Casablanca</p>
+        <p>Appart. 1 ch. à Casablanca avec balcon, cuisine équipée, salon, Wi-Fi gratuit, parking privé. Vue jardin. À
+          5–8 km du Morocco Mall, Anfa Place, Mosquée Hassan II, Cathédrale. Aéroport à 23 km.</p>
+
+        <p>pour 2 adultes et 1 enfant</p>
+
+        <p class="PRICEMAD"><strong> Prix : 53 567 MAD / moins </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/longuedureeMaisons2" class="card">
+        <img src="/static/longue-dureeMaisons2/Diamond House-photo1.jpg" alt="Diamond House">
+      </a>
+      <div class="card-content">
+        <h2>Diamond House</h2>
+        <p>🌍 Casablanca beausejour, Hay Hassani, 20200 Casablanca, Maroc</p>
+        <p>Diamond House à Casablanca avec bain à remous, balcon, terrasse, cuisine équipée, Wi-Fi gratuit et parking
+          privé. À 4–7 km du Morocco Mall et Anfa Place. Aéroport à 25 km.</p>
+        <p>pour 5 adultes et 4 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 12 942 MAD / moins </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/longuedureeVillas2" class="card">
+        <img src="/static/longue-dureeVillas2/Nassali-photo1.jpg" alt="Nassali Villa">
+      </a>
+      <div class="card-content">
+        <h2>Nassali Villa-Casablanca</h2>
+        <p>🌍 F4Q2+3W5, Route d'Ourik</p>
+        <p>Villa 4 ch. à Casablanca avec piscine privée, jardin, terrasse et balcon. Clim., cuisine équipée, 4 sdb,
+          Wi-Fi, TV. À 1,8 km de la plage d’Aïn Diab, 3,4 km d’Anfa Place, 3,8 km du Morocco Mall, 25 km aéroport.</p>
+
+        <p>pour 6 adultes et 1 enfant</p>
+
+        <p class="PRICEMAD"><strong> Prix : 65 716 MAD / moins </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="cards">
+    <div class="card">
+      <a href="/longuedureeAppartements3" class="card">
+        <img src="/static/longue-dureeAppartements3/Appartement charmant, 2Terrasses-photo1.jpg"
+          alt="Appartement charmant">
+      </a>
+      <div class="card-content">
+        <h2>Appartement charmant, 2Terrasses-Essaouira</h2>
+        <p>🌍 4 Rue Abdellah Chefchaouni, Essaouira 44000</p>
+        <p>Appartement 3 ch. à Essaouira avec 2 terrasses, vue sur ville, cuisine équipée, Wi-Fi, TV, 1 sdb. À 1,3 km de
+          la plage, 6,1 km du golf de Mogador, 17 km aéroport.</p>
+
+        <p>pour 3 adultes et 3 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 10 500 MAD / moins </strong></p>
+
+      </div>
+    </div>
+    <div class="card">
+      <a href="/longuedureeMaisons3" class="card">
+        <img src="/static/longue-dureeMaisons3/Dar Essaada-photo1.jpg" alt="Dar Essaada-Essaouira">
+      </a>
+      <div class="card-content">
+        <h2>Dar Essaada-Essaouira</h2>
+        <p>🌍 Essaouira</p>
+        <p>Maison d’hôtes avec piscine, hammam, Wi‑Fi. Excursions sur demande. À 12 km d’Essaouira, 20 min de Sidi
+          Kaouki.</p>
+
+        <p>pour 4 adultes et 4 enfants</p>
+
+
+        <p class="PRICEMAD"><strong> Prix : 13 801 MAD / moins </strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <a href="/longuedureeVillas3" class="card">
+        <img src="/static/longue-dureeVillas3/Family Villa Soleil-photo1.jpg" alt="Family Villa Soleil">
+      </a>
+      <div class="card-content">
+        <h2>Family Villa Soleil Essaouira</h2>
+        <p>🌍 Centre، Hotel Villa Soleil, Sidi Kaouki 44000</p>
+        <p>Villa familiale avec terrasse, balcon, Wi‑Fi gratuit. À 700 m de la plage, 3,1 km du golf de Mogador, 14 km
+          de l’aéroport.</p>
+
+        <p>pour 2 adultes et 4 enfants</p>
+
+        <p class="PRICEMAD"><strong> Prix : 20 526 MAD / moins </strong></p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <script src="../static/script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

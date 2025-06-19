@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TIGMINO</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+    <div class="hero2">
+        <header>
+            <a href="/Accueil">
+                <img src="../static/TG.png" alt="TG Logo">
+            </a>
+            <nav>
+                <a href="/Accueil">ACCUEIL</a>
+
+                <div class="dropdown-locations">
+                    <a href="#">LOCATIONS</a>
+                    <div class="dropdown-locations-content">
+                        <a href="/locations/journaliere">Locations journaliére</a>
+                        <a href="/locations/longue-duree">Locations longue durée</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href="#">ACHATS-VENTES</a>
+                    <div class="dropdown-content">
+                        <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+                        <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+                        <a href="/ACHATS-VENTES/Villas">Villas</a>
+                    </div>
+                </div>
+
+                <a href="/Contact">CONTACT</a>
+                <a href="/Site">SITE</a>
+
+            </nav>
+        </header>
+
+        <div class="auth">
+            {% if not session.username %}
+            <button onclick="showLoginForm()">Connexion</button>
+            <button onclick="showRegisterForm()">S'inscrire</button>
+            {% else %}
+            <div class="user-info">
+                <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}"
+                    alt="Profil">
+                <span class="username">{{ session.username }}</span>
+            </div>
+            <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+            <a href="/logout" class="logout">Se déconnecter</a>
+            {% endif %}
+        </div>
+
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="hideLoginForm()">&times;</span>
+                <form action="/login" method="POST">
+                    <h2>Connexion</h2>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Mot de passe" required>
+                    <button href="home.html" type="submit">Se connecter</button>
+                </form>
+            </div>
+        </div>
+
+
+
+
+
+        {% set flash_messages = get_flashed_messages() %}
+
+        <!-- Lightbox version -->
+        {% if flash_messages %}
+        <div class="lightbox" id="lightbox">
+            <div class="lightbox-content">
+                {% for message in flash_messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+                <button onclick="closeLightbox()">OK</button>
+            </div>
+        </div>
+        {% endif %}
+
+
+        <!-- Register Modal -->
+        <div id="registerModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="hideRegisterForm()">&times;</span>
+                <form action="/register" method="POST">
+                    <h2>Créer un compte</h2>
+                    <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Mot de passe" required>
+                    <button href="home.html" type="submit">S'inscrire</button>
+                    {% if session['user'] in users %}
+                    <span class="username">{{ users[session['user']]['username'] }}</span>
+                    {% else %}
+                    <span class="username">(utilisateur inconnu)</span>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <!-- PROFILE BANNER -->
+    <div class="profile-banner">
+        <div class="profile-info">
+            {% if session.profile_pic %}
+            <img src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" class="profil1imgae">
+            {% endif %}
+            <div class="profile-details">
+                <h2>{{ session['username'] }}</h2>
+                <p>Particulier</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE NAVIGATION TABS -->
+    <div class="tabs">
+        <a href="/account">Mes demandes</a>
+        <a href="/Réglages2">Mon compte</a>
+    </div>
+
+    <div class="settings-container">
+        <aside class="sidebar">
+            <a href="/Réglages"><button>Ajouter une demande</button></a>
+        </aside>
+        <main class="settings-form">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-message">
+                {{ messages[0] }}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form id="settings-form" method="POST" action="/Réglages">>
+                <h2>Ajouter une demande</h2>
+                <form method="POST" action="/Réglages">
+
+                    <label>Message</label>
+                    <textarea name="message" required></textarea>
+
+                    <label>Ville</label>
+                    <select name="city">
+                        <option>Casablanca</option>
+                        <option>Rabat</option>
+                        <option>Marrakech</option>
+                        <option>Agadir</option>
+                        <option>Essaouira</option>
+                        <option>Taghazout</option>
+                    </select>
+
+                    <label>Nombre des Adultes</label>
+                    <select name="adultes">
+                        <option>1 adulte</option>
+                        <option>2 adultes</option>
+                        <option>3 adultes</option>
+                        <option>4 adultes</option>
+                        <option>5 adultes</option>
+                        <option>6 adultes</option>
+                    </select>
+
+                    <label>Nombre des Enfants</label>
+                    <select name="enfants">
+                        <option>0 enfant</option>
+                        <option>1 enfant</option>
+                        <option>2 enfants</option>
+                        <option>3 enfants</option>
+                        <option>4 enfants</option>
+                    </select>
+
+                    <label>Type de bien</label>
+                    <select name="type"> <!-- ✅ this must match Flask -->
+                        <option>Appartement</option>
+                        <option>Maison</option>
+                        <option>Villa</option>
+                    </select>
+
+
+                    <button class="save-btn" type="submit">SAUVEGARDER</button>
+                </form>
+
+            </form>
+    </div>
+
+    <script src="../../static/Script.js"></script>
+</body>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

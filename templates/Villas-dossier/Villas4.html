@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../../static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+       <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <main class="appartement-fiche">
+    <h1 class="appartement-titre">Villa Palmeraie Golf Agadir</h1>
+    <div class="appartement-meta">Villa à vendre</div>
+    <p class="PRICEMAD"><strong> Prix :</strong> 3 234 000 MAD</p>
+    <!-- Main image -->
+    <div class="appartement-group">
+      <div class="photo-viewer">
+        <img id="mainImage" src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo1.jpg" alt="Image principale">
+
+        <div class="left-line"></div>
+        <div class="right-line"></div>
+      </div>
+
+      <!-- Thumbnail gallery -->
+      <div class="appartement-galerie">
+        <div>
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo1.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo2.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo3.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo4.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo5.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo6.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo7.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo8.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo9.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo10.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo11.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo12.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo13.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo14.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo15.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo16.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo17.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo18.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo19.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo20.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo21.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Villas4-images/Villa Palmeraie Golf Agadir-photo22.jpg" onclick="switchPhoto(this)">
+        </div>
+      </div>
+    </div>
+    <div class="appartement-description">
+      Situé à Agadir, l’hébergement Villa Palmeraie Golf Agadir offre une vue sur la piscine. Il comprend une piscine
+      extérieure, un jardin, une terrasse et une connexion Wi-Fi gratuite. Cet hébergement met à votre disposition une
+      piscine privée et un parking privé gratuit.
+
+      Cette villa avec climatisation se compose de 4 chambres, d'un salon, d'une cuisine entièrement équipée avec un
+      réfrigérateur et une machine à café, ainsi que de 3 salles de bains avec une douche et des articles de toilette
+      gratuits. Des serviettes et du linge de lit sont à votre disposition.
+
+      Un petit-déjeuner continental est servi sur place.
+
+      Vous séjournerez à respectivement 500 mètres et 1,6 km de ces lieux d’intérêt : Medina Polizzi et La Medina
+      d'Agadir. L’établissement se situe à 15 km de l’aéroport le plus proche (Aéroport d'Agadir-Al Massira) et propose
+      un service de navette aéroport payant.
+    </div>
+
+    <div class="appartement-details">
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Détails de la Villa</h3>
+        <p><i class="fa-solid fa-wifi icon-large"></i> <strong> Wi-Fi :</strong> Gratuite dans tout
+          l’établissement</p>
+        <p><i class="fa-solid fa-square-parking icon-large"></i> <strong>Parking :</strong> Gratuit, privé, accessible
+          PMR, sans réservation</p>
+        <p><i class="fa-solid fa-people-group icon-large"></i> <strong>Capacité :</strong> Jusqu’à 6 adultes et 3
+          enfants
+        </p>
+        <p><i class="fa-solid fa-house icon-large"></i> <strong>Villa :</strong> 4 chambres, 2 salons, terrasse et
+          jardin
+        </p>
+        <p><i class="fa-solid fa-bed icon-large"></i> <strong>Literie :</strong><br>
+          • Chambre 1 : 1 très grand lit double<br>
+          • Chambre 2 : 1 grand lit double<br>
+          • Chambre 3 : 1 grand lit double<br>
+          • Chambre 4 : 1 grand lit double<br>
+          • Salon : 2 canapés-lits</p>
+        <p><i class="fa-solid fa-temperature-high icon-large"></i> <strong>Climatisation :</strong> Oui</p>
+        <p><i class="fa-solid fa-bath icon-large"></i> <strong>Salle de bains :</strong> Plusieurs salles de bains avec
+          douche, sèche-cheveux, serviettes, chaussons et articles de toilette</p>
+        <p><i class="fa-solid fa-kitchen-set icon-large"></i> <strong>Cuisine :</strong> Entièrement équipée
+          (lave-vaisselle, machine à café, four, micro-ondes, grille-pain, sèche-linge, réfrigérateur, ustensiles)</p>
+        <p><i class="fa-solid fa-tv icon-large"></i> <strong>Télévision :</strong> Écran plat avec chaînes satellite,
+          câble et service de streaming (Netflix)</p>
+        <p><i class="fa-solid fa-umbrella-beach icon-large"></i> <strong>Terrasse :</strong> Meublée avec vue sur
+          piscine
+          et jardin</p>
+        <p><i class="fa-solid fa-money-bill-wave icon-large"></i> <strong>Prix :</strong> À partir de <strong>3 234 000
+            MAD</strong></p>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Équipements & Services</h3>
+        <ul>
+          <li><i class="fa-solid fa-water-ladder icon-large"></i> Piscine extérieure chauffée avec chaises longues,
+            parasols et serviettes</li>
+          <li><i class="fa-solid fa-chair icon-large"></i> Coin salon, coin repas et mobilier extérieur</li>
+          <li><i class="fa-solid fa-wind icon-large"></i> Ventilateur, chauffage et climatisation</li>
+          <li><i class="fa-solid fa-truck-arrow-right icon-large"></i> Livraison de courses (en supplément)</li>
+          <li><i class="fa-solid fa-mug-saucer icon-large"></i> Café sur place, minibar, fruits, vin et champagne (en
+            supplément)</li>
+          <li><i class="fa-solid fa-horse icon-large"></i> Activités à proximité : équitation, golf, pêche, planche à
+            voile (en supplément)</li>
+          <li><i class="fa-solid fa-van-shuttle icon-large"></i> Navette aéroport et service de transport (en
+            supplément)
+          </li>
+          <li><i class="fa-solid fa-ban-smoking icon-large"></i> Établissement entièrement non-fumeurs</li>
+          <li><i class="fa-solid fa-shield-halved icon-large"></i> Sécurité 24h/24, caméras, extincteurs, détecteurs de
+            fumée, coffre-fort</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-user-shield icon-large"></i> Conditions de l’établissement</h3>
+        <ul>
+          <li><i class="fa-solid fa-child icon-large"></i> Tous les enfants sont les bienvenus</li>
+          <li><i class="fa-solid fa-baby icon-large"></i> Lit bébé disponible pour 10 €/nuit (0–3 ans), sur demande et
+            sous réserve de disponibilité</li>
+          <li><i class="fa-solid fa-ban icon-large"></i> Fêtes et événements non autorisés</li>
+          <li><i class="fa-solid fa-bell-slash icon-large"></i> Heures silencieuses : de 20h00 à 9h00</li>
+          <li><i class="fa-solid fa-smoking-ban icon-large"></i> Hébergement non-fumeurs</li>
+          <li><i class="fa-solid fa-dog icon-large"></i> Animaux non admis</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-language icon-large"></i> Langues parlées</h3>
+        <ul>
+          <li>Arabe, Français, Anglais, Allemand</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="appartement-contact">
+      Intéressé par ce bien ? <br>
+      Contactez-nous dès aujourd'hui à <strong>info@tigmino.ma</strong> ou via WhatsApp au <strong>+212 6 74 60 20
+        18</strong> pour plus d'informations ou programmer une visite.
+    </div>
+
+
+
+
+
+
+
+    <div class="CONTACTMAP">
+      <!-- Contact Form -->
+      <div class="tigmino-contact">
+        <form id="settings-form" method="POST" action="/Réglages">
+          <h2>Ajouter une demande</h2>
+
+          <label>Nom · Prénom</label>
+          <input type="text" name="name" placeholder="Nom · Prénom" required>
+
+          <label>Téléphone</label>
+          <input type="text" name="phone" placeholder="Téléphone" required>
+
+          <label>Message</label>
+          <textarea name="message" required></textarea>
+
+          {% if not session.username %}
+          <h2>Connectez-vous au TIGMINO</h2>
+          {% else %}
+          <button class="save-btn" type="submit">SAUVEGARDER</button>
+          {% endif %}
+        </form>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3442.2977589036564!2d-9.570596124596111!3d30.370901674760788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb3b7b7cc2ff45d%3A0xb76e48328bddef34!2sVilla%20Palmeraie%20Golf%20Agadir!5e0!3m2!1sfr!2sma!4v1750020670424!5m2!1sfr!2sma"
+          width="500px" height="460px" style="border:0;" allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </iframe>
+      </div>
+    </div>
+
+
+  </main>
+
+
+
+  <script src="../../static/Script.js"></script>
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>

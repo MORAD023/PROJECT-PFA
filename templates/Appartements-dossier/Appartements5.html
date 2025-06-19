@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIGMINO</title>
+  <link rel="stylesheet" href="../../static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="../static/TG.png">
+</head>
+
+<body>
+  <div class="hero2">
+    <header>
+      <a href="/Accueil">
+        <img src="../static/TG.png" alt="TG Logo">
+      </a>
+       <nav>
+        <a href="/Accueil">ACCUEIL</a>
+
+        <div class="dropdown-locations">
+          <a href="#">LOCATIONS</a>
+          <div class="dropdown-locations-content">
+            <a href="/locations/journaliere">Locations journaliére</a>
+            <a href="/locations/longue-duree">Locations longue durée</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="#">ACHATS-VENTES</a>
+          <div class="dropdown-content">
+            <a href="/ACHATS-VENTES/Appartements">Appartements</a>
+            <a href="/ACHATS-VENTES/Maisons">Maisons</a>
+            <a href="/ACHATS-VENTES/Villas">Villas</a>
+          </div>
+        </div>
+
+        <a href="/Contact">CONTACT</a>
+        <a href="/Site">SITE</a>
+
+      </nav>
+    </header>
+
+    <div class="auth">
+      {% if not session.username %}
+      <button onclick="showLoginForm()">Connexion</button>
+      <button onclick="showRegisterForm()">S'inscrire</button>
+      {% else %}
+      <div class="user-info">
+        <img class="profil1imgae" src="{{ url_for('static', filename='uploads/' ~ session.profile_pic) }}" alt="Profil">
+        <span class="username">{{ session.username }}</span>
+      </div>
+      <a class="account-link" href="/account"> Mon Compte ⚙️</a>
+      <a href="/logout" class="logout">Se déconnecter</a>
+      {% endif %}
+    </div>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideLoginForm()">&times;</span>
+        <form action="/login" method="POST">
+          <h2>Connexion</h2>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </div>
+
+
+
+
+
+    {% set flash_messages = get_flashed_messages() %}
+
+    <!-- Lightbox version -->
+    {% if flash_messages %}
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        {% for message in flash_messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        <button onclick="closeLightbox()">OK</button>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="hideRegisterForm()">&times;</span>
+        <form action="/register" method="POST">
+          <h2>Créer un compte</h2>
+          <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Mot de passe" required>
+          <button href="home.html" type="submit">S'inscrire</button>
+          {% if session['user'] in users %}
+          <span class="username">{{ users[session['user']]['username'] }}</span>
+          {% else %}
+          <span class="username">(utilisateur inconnu)</span>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <main class="appartement-fiche">
+    <h1 class="appartement-titre">Tamourrit Apartment-Taghazout</h1>
+    <div class="appartement-meta">Appartement à vendre</div>
+    <p class="PRICEMAD"><strong> Prix :</strong> 1 200 000 MAD</p>
+
+    <div class="appartement-group">
+      <div class="photo-viewer">
+        <img id="mainImage" src="/static/Appartements5-images/Tamourrit Apartment-photo1.jpg" alt="Image principale">
+
+        <div class="left-line"></div>
+        <div class="right-line"></div>
+      </div>
+      <div class="appartement-galerie">
+        <div>
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo1.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo2.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo3.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo4.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo5.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo6.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo7.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo8.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo9.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo10.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo11.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo12.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo13.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo14.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo15.jpg" onclick="switchPhoto(this)">
+        </div>
+        <div>
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo16.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo17.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo18.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo19.jpg" onclick="switchPhoto(this)">
+          <img src="/static/Appartements5-images/Tamourrit Apartment-photo20.jpg" onclick="switchPhoto(this)">
+        </div>
+      </div>
+    </div>
+    <div class="appartement-description">
+      Les réductions Genius proposées par cet établissement dépendent des dates de réservation, des dates de
+      séjour et des autres offres disponibles.
+
+      Infos fiables :Selon les clients, la description et les photos de cet établissement reflètent vraiment la
+      réalité.
+      Situé à Taghazout, l’hébergement Luxurious Golf & Sea View Beach Apartment with Pool Access - Tamourrit,
+      Taghazout Bay offre une vue sur la mer. Il propose une piscine extérieure, un jardin, une terrasse et une
+      connexion Wi-Fi gratuite. Cet hébergement en bord de mer met à votre disposition un balcon et un parking
+      privé gratuit.
+
+      Cet appartement avec climatisation se compose de 1 chambre, d'un salon, d'une cuisine entièrement équipée
+      avec un réfrigérateur et une machine à café, ainsi que de 2 salles de bains avec une baignoire ou une douche
+      et un sèche-cheveux. Cet hébergement met à votre disposition des serviettes et du linge de lit.
+
+      En plus de profiter d’un service de location de vélos et d’un service de location de voitures sur place,
+      vous pourrez pratiquer le vélo dans les environs.
+
+      Vous séjournerez à respectivement 500 mètres et 1,6 km de ces lieux d’intérêt : Plage de Taghazout et Golf
+      Tazegzout. L'aéroport le plus proche (Aéroport d'Agadir-Al Massira) est à 37 km. Un service de navette
+      aéroport payant peut être assuré par l’établissement.
+    </div>
+
+    <div class="appartement-details">
+      <div>
+        <h3><i class="fa-solid fa-concierge-bell icon-large"></i> Détails de l'Appartement</h3>
+        <p><i class="fa-solid fa-ruler-combined icon-large"></i> <strong>Surface :</strong> Environ 80 m²</p>
+        <p><i class="fa-solid fa-bed icon-large"></i> <strong>Chambres :</strong> 1</p>
+        <p><i class="fa-solid fa-bath icon-large"></i> <strong>Salles de bain :</strong> 2</p>
+        <p><i class="fa-solid fa-umbrella-beach icon-large"></i> <strong>Terrasse / Balcon :</strong> Oui</p>
+        <p><i class="fa-solid fa-mountain-sun icon-large"></i> <strong>Vue :</strong> Mer et jardin</p>
+        <p><i class="fa-solid fa-users icon-large"></i> <strong>Capacité :</strong> Jusqu’à 4 adultes et 2 enfants</p>
+        <p><i class="fa-solid fa-money-bill-wave icon-large"></i> <strong>Prix :</strong> à partir de 1 200 000 MAD
+        </p>
+        <p><i class="fa-solid fa-hashtag icon-large"></i> <strong>Référence :</strong> TG1005</p>
+
+        <p><i class="fa-solid fa-location-dot icon-large"></i> <strong>Situation :</strong> Taghazout – à 500 m de
+          la plage et 1,6 km du Golf Tazegzout. Aéroport à 37 km. Navette disponible (payante).</p>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-door-open icon-large"></i> Agencement</h3>
+        <ul>
+          <li><i class="fa-solid fa-bed icon-large"></i> Chambre : 1 lit double</li>
+          <li><i class="fa-solid fa-couch icon-large"></i> Salon : 2 canapés-lits</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-star icon-large"></i> Points forts</h3>
+        <ul>
+          <li><i class="fa-solid fa-person-swimming icon-large"></i> Piscine extérieure toute l’année</li>
+          <li><i class="fa-solid fa-water icon-large"></i> Vue mer panoramique</li>
+          <li><i class="fa-solid fa-umbrella-beach icon-large"></i> Plage à proximité immédiate</li>
+          <li><i class="fa-solid fa-wifi icon-large"></i> Wi-Fi gratuit dans tout l’établissement</li>
+          <li><i class="fa-solid fa-square-parking icon-large"></i> Parking privé gratuit</li>
+          <li><i class="fa-solid fa-van-shuttle icon-large"></i> Navette aéroport sur demande</li>
+          <li><i class="fa-solid fa-bicycle icon-large"></i> Location de vélos & voitures</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-screwdriver-wrench icon-large"></i> Équipements</h3>
+        <ul>
+          <li><i class="fa-solid fa-temperature-high icon-large"></i> Climatisation, chauffage, ventilateur</li>
+          <li><i class="fa-solid fa-tv icon-large"></i> TV écran plat avec Netflix</li>
+          <li><i class="fa-solid fa-kitchen-set icon-large"></i> Cuisine équipée : machine à café, four,
+            réfrigérateur, ustensiles</li>
+          <li><i class="fa-solid fa-sink icon-large"></i> Lave-linge & sèche-linge</li>
+          <li><i class="fa-solid fa-bath icon-large"></i> 2 salles de bains avec sèche-cheveux</li>
+          <li><i class="fa-solid fa-volume-xmark icon-large"></i> Insonorisation, parquet, fer à repasser</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-person-hiking icon-large"></i> Activités</h3>
+        <ul>
+          <li><i class="fa-solid fa-person-walking icon-large"></i> Plage, balades à pied</li>
+          <li><i class="fa-solid fa-golf-ball-tee icon-large"></i> Minigolf (supplément)</li>
+          <li><i class="fa-solid fa-horse icon-large"></i> Équitation, cyclisme, randonnée</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-children icon-large"></i> Familles</h3>
+        <ul>
+          <li><i class="fa-solid fa-puzzle-piece icon-large"></i> Jeux de société / puzzles</li>
+          <li><i class="fa-solid fa-house-user icon-large"></i> Séjours familiaux recommandés</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-handshake icon-large"></i> Services</h3>
+        <ul>
+          <li><i class="fa-solid fa-bell-concierge icon-large"></i> Concierge</li>
+          <li><i class="fa-solid fa-file-invoice icon-large"></i> Facture sur demande</li>
+          <li><i class="fa-solid fa-van-shuttle icon-large"></i> Navette aéroport (supplément)</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i class="fa-solid fa-scale-balanced icon-large"></i> Conditions</h3>
+        <ul>
+          <li><i class="fa-solid fa-smoking-ban icon-large"></i> Établissement non-fumeur</li>
+          <li><i class="fa-solid fa-dog icon-large"></i> Animaux non précisés (à confirmer)</li>
+          <li><i class="fa-solid fa-language icon-large"></i> Langues : Arabe, Français, Anglais</li>
+          <li><i class="fa-solid fa-shield-halved icon-large"></i> Sécurité 24h/24</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="appartement-contact">
+      Intéressé par ce bien ? <br>
+      Contactez-nous dès aujourd'hui à <strong>info@tigmino.ma</strong> ou via WhatsApp au <strong>+212 6 74 60 20
+        18</strong> pour plus d'informations ou programmer une visite.
+    </div>
+
+
+
+    <div class="CONTACTMAP">
+      <!-- Contact Form -->
+      <div class="tigmino-contact">
+        <form id="settings-form" method="POST" action="/Réglages">
+          <h2>Ajouter une demande</h2>
+
+          <label>Nom · Prénom</label>
+          <input type="text" name="name" placeholder="Nom · Prénom" required>
+
+          <label>Téléphone</label>
+          <input type="text" name="phone" placeholder="Téléphone" required>
+
+          <label>Message</label>
+          <textarea name="message" required></textarea>
+
+          {% if not session.username %}
+          <h2>Connectez-vous au TIGMINO</h2>
+          {% else %}
+          <button class="save-btn" type="submit">SAUVEGARDER</button>
+          {% endif %}
+        </form>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3436.902856232655!2d-9.69158080321045!3d30.523785899999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb3b3e88196b3ff%3A0x5f9ed4012810e623!2sResidence%20Tamourrit!5e0!3m2!1sfr!2sma!4v1750010765193!5m2!1sfr!2sma"
+          width="500" height="460" style="border:0;" allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+      </div>
+    </div>
+
+
+
+
+  </main>
+
+
+
+  <script src="../../static/Script.js"></script>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="flash-messages">
+    {% for category, message in messages %}
+    <div class="alert {{ category }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <script src="../../static/Script.js"></script>
+
+
+</body>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <img src="../../static/TG.png" alt="TG Logo">
+      <p>TIGMINO – Vivez le Maroc, maison par maison.</p>
+    </div>
+
+
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a a href="/Accueil">Accueil</a></li>
+        <li><a href="/locations/journaliere">Locations : Locations journaliére</a></li>
+        <li><a href="/locations/longue-duree">Locations : Locations longue durée</a>
+        </li>
+        <li><a href="/ACHATS-VENTES/Appartements">Achats / Ventes : Appartements</a></li>
+        <li><a href="/ACHATS-VENTES/Maisons">Achats / Ventes : Maisons</a></li>
+        <li><a href="/ACHATS-VENTES/Villas">Achats / Ventes : Villas</a></li>
+        </li>
+        <li>
+          <a href="/Contact">Contact</a>
+        </li>
+        <a href="/Site">Site</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>Email : contact@tigmino.ma</p>
+      <p>Tél : +212 6 00 00 00 00</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 TIGMINO. Tous droits réservés.</p>
+  </div>
+</footer>
+
+</html>
